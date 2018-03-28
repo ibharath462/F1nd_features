@@ -7,18 +7,18 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_favorites"
         android:icon="@android:drawable/btn_star"
-        android:title="Favorites" />
+        android:title="@string/title_favorites" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_wod"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_wod" />
 
     <item
-        android:id="@+id/settings"
+        android:id="@+id/navigation_settings"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="Settings" />
+        android:title="@string/title_settings" />
 
 </menu>
