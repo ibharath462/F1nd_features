@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#5E35B1"
+    android:layout_height="match_parent">
+
+
+<android.widget.LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
+
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="8"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -33,6 +42,18 @@
     </LinearLayout>
 
 
+    </android.widget.LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/mainFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.75"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="80dp"
+        app:backgroundTint="@android:color/holo_green_dark"
+        app:srcCompat="@android:drawable/ic_menu_search" />
 
-</android.widget.LinearLayout>
+</RelativeLayout>
