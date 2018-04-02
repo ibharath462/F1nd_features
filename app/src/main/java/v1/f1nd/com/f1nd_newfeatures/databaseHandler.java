@@ -86,7 +86,7 @@ public class databaseHandler extends SQLiteOpenHelper{
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fid from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER("+WORD+") LIKE '" + q.toUpperCase() + "%' limit 10;";
+        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER("+WORD+") LIKE '" + q.toUpperCase() + "%' limit 10;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -134,7 +134,7 @@ public class databaseHandler extends SQLiteOpenHelper{
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         JSONArray resultArray = new JSONArray();
-        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.id from dict left join history_mapping on history_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where history_mapping.id = dict.id ;";
+        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join history_mapping on history_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where history_mapping.id = dict.id ;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
