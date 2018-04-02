@@ -1,12 +1,15 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -26,6 +29,8 @@ public class settings extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    Button saveSettings,startService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,5 +108,32 @@ public class settings extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        saveSettings = (Button)getView().findViewById(R.id.saveSettings);
+        startService = (Button)getView().findViewById(R.id.startService);
+
+        saveSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+            }
+        });
+
+        startService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent service = new Intent(getActivity(),bgService.class);
+                getContext().startService(service);
+
+            }
+        });
     }
 }

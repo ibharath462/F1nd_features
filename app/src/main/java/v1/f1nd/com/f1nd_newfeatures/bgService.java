@@ -9,6 +9,8 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 public class bgService extends Service {
+
+    wodReceiver alarmReceiver = new wodReceiver();
     public bgService() {
     }
 
@@ -28,8 +30,8 @@ public class bgService extends Service {
                     .setAutoCancel(true);
 
             Notification notification = builder.build();
-            Toast.makeText(getApplicationContext(),"Hello",Toast.LENGTH_SHORT).show();
-            startForeground(1, notification);
+            Toast.makeText(getApplicationContext(),"Oreo / higher",Toast.LENGTH_SHORT).show();
+            startForeground(1234, notification);
 
         } else {
 
@@ -41,9 +43,15 @@ public class bgService extends Service {
 
             Notification notification = builder.build();
 
-            startForeground(1, notification);
+            startForeground(1234, notification);
         }
-        Toast.makeText(getApplicationContext(),"Hello",Toast.LENGTH_SHORT).show();
+        alarmReceiver.setAlarm(this);
+        Toast.makeText(getApplicationContext(),"F1nd service started",Toast.LENGTH_SHORT).show();
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
     }
 }
