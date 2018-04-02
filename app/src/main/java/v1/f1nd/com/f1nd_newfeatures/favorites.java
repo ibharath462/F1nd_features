@@ -1,12 +1,32 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 
 
 /**
@@ -26,6 +46,12 @@ public class favorites extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    databaseHandler dbHandler;
+    ArrayAdapter<Word> adapter=null;
+    ArrayList<Word> words;
+    ListView favorite_listView;
+
+    View swipeView = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,6 +89,7 @@ public class favorites extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        swipeView = inflater.inflate(R.layout.word_view,container,false);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
@@ -104,4 +131,49 @@ public class favorites extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+
+
+        dbHandler = new databaseHandler(getContext());
+        favorite_listView = (ListView)getView().findViewById(R.id.favorite_listView);
+        JSONArray favoriteArray = new JSONArray();
+        favoriteArray = dbHandler.getFavorites();
+        Log.d("F1nd_MainActivity","Adapter count.." + favoriteArray.length() + "\n");
+        words = new ArrayList<>();
+
+        for(int i=0; i<favoriteArray.length();i++){
+            try {
+                JSONObject tWord = favoriteArray.getJSONObject(i);
+                Log.d("F1nd_MainActivity","parsed " + tWord.toString() + "\n");
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),true));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        adapter = new wordAdapter(getContext(), 0, words);
+        favorite_listView.setAdapter(adapter);
+
+
+
+
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //mBlurEngine.onResume(getRetainInstance());
+    }
+
+
+
+
 }
