@@ -1,7 +1,10 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -24,14 +27,20 @@ public class bgService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            Notification.Builder builder = new Notification.Builder(this, "1234")
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText("Hello")
-                    .setAutoCancel(true);
+            int notifyID = 1;
+            String CHANNEL_ID = "my_channel_01";// The id of the channel.
+            CharSequence name = "WOD";// The user-visible name of the channel.
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            Notification notification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("New Message")
+                    .setContentText("You've received new messages.")
+                    .setSmallIcon(R.drawable.heart_on)
+                    .setChannelId(CHANNEL_ID)
+                    .setOngoing(true)
+                    .build();
 
-            Notification notification = builder.build();
-            Toast.makeText(getApplicationContext(),"Oreo / higher",Toast.LENGTH_SHORT).show();
-            startForeground(1234, notification);
+            startForeground(1, notification);
 
         } else {
 
@@ -43,7 +52,7 @@ public class bgService extends Service {
 
             Notification notification = builder.build();
 
-            startForeground(1234, notification);
+            startForeground(1, notification);
         }
         alarmReceiver.setAlarm(this);
         Toast.makeText(getApplicationContext(),"F1nd service started",Toast.LENGTH_SHORT).show();

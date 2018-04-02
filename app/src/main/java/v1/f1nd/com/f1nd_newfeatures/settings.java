@@ -1,8 +1,12 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -131,7 +135,13 @@ public class settings extends Fragment {
             public void onClick(View view) {
 
                 Intent service = new Intent(getActivity(),bgService.class);
-                getContext().startService(service);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getContext().startForegroundService(service);
+                    // Sets an ID for the notification, so it can be updated.
+
+                } else {
+                    getContext().startService(service);
+                }
 
             }
         });

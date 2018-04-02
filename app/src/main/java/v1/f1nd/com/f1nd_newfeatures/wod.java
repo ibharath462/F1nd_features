@@ -3,10 +3,20 @@ package v1.f1nd.com.f1nd_newfeatures;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -26,6 +36,11 @@ public class wod extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    databaseHandler dbHandler;
+    ArrayAdapter<Word> adapter=null;
+    ArrayList<Word> words;
+    ListView wod_listView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -103,5 +118,35 @@ public class wod extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        dbHandler = new databaseHandler(getContext());
+        wod_listView = (ListView)getView().findViewById(R.id.wod_listView);
+        JSONArray favoriteArray = new JSONArray();
+        favoriteArray = dbHandler.getWordsOfDays();
+        Log.d("F1nd_MainActivity","Adapter count.." + favoriteArray.length() + "\n");
+        words = new ArrayList<>();
+
+        for(int i=0; i<favoriteArray.length();i++){
+            try {
+                JSONObject tWord = favoriteArray.getJSONObject(i);
+                Log.d("F1nd_WOD_Fragment ","parsed " + tWord.toString() + "\n");
+                boolean isLiked = false;
+                if(tWord.has("fid")){
+                    isLiked = true;
+                }
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        adapter = new wordAdapter(getContext(), 0, words);
+        wod_listView.setAdapter(adapter);
+
     }
 }
