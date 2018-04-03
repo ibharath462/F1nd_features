@@ -167,7 +167,7 @@ public class home extends Fragment {
                 if(tWord.has("fid")){
                     isLiked = true;
                 }
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked));
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,0));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -208,7 +208,7 @@ public class home extends Fragment {
                     isLiked = true;
                 }
                 Log.d("F1nd_MainActivity","parsed " + tWord.toString() + " " + isLiked + "\n");
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked));
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,false,1));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

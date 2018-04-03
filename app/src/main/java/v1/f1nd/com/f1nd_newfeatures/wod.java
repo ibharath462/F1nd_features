@@ -139,7 +139,7 @@ public class wod extends Fragment {
                 if(tWord.has("fid")){
                     isLiked = true;
                 }
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked));
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,3));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

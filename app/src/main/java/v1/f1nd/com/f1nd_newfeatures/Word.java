@@ -11,15 +11,19 @@ public class Word {
     private String word,wordType,meaning;
     private long id;
     boolean liked = false;
+    boolean deletable = false;
+    int type;
 
-    public Word(long id,String word,String wordType,String meaning,boolean isLiked){
+    public Word(long id,String word,String wordType,String meaning,boolean isLiked,boolean deletable,int type){
 
         this.id=id;
         this.word=word;
         this.wordType=wordType;
         this.meaning=meaning;
         this.liked = isLiked;
-        Log.d("F1nd_Word","WORD " + id + " " + word + " " + wordType + " " + meaning + " " + isLiked + "\n");
+        this.deletable = deletable;
+        this.type = type;
+        Log.d("F1nd_Word","WORD " + id + " " + word + " " + wordType + " " + meaning + " " + isLiked + " " + deletable + " " + type + "\n");
     }
     public String getWord(){
         return word;
@@ -35,6 +39,12 @@ public class Word {
     }
     public  boolean getLiked(){
         return liked;
+    }
+    public boolean getDeletable(){
+        return deletable;
+    }
+    public int getType(){
+        return type;
     }
 
 

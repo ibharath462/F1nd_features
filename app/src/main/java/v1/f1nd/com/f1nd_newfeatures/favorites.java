@@ -151,7 +151,7 @@ public class favorites extends Fragment {
             try {
                 JSONObject tWord = favoriteArray.getJSONObject(i);
                 Log.d("F1nd_FAV_Fragment ","parsed " + tWord.toString() + "\n");
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),true));
+                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),true,false,2));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

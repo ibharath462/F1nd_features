@@ -158,6 +158,22 @@ public class databaseHandler extends SQLiteOpenHelper{
         return  resultArray;
     }
 
+    public void removeHistory(Long id){
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+        database.delete("history_mapping","id=" + id,null);
+        database.close();
+    }
+
+    public void removeWOD(Long id){
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+        database.delete("wod_mapping","id=" + id,null);
+        database.close();
+    }
+
     public JSONObject getWordOfTheDay(){
         JSONObject wod = new JSONObject();
         String wodId = "";

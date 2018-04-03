@@ -9,7 +9,9 @@ import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -99,11 +101,40 @@ public class wordAdapter extends ArrayAdapter{
 
                 builder.setTitle("" + word.getText().toString())
                         .setMessage("" + w.getMeaning())
-                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setIcon(android.R.drawable.btn_star)
                         .show();
                 return false;
             }
 
+        });
+
+
+        top_wrapper.setOnTouchListener(new View.OnTouchListener() {
+
+            private GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    if(w.getDeletable()){
+                        if(w.getType() == 0){
+                            dbHandler.removeHistory(w.getId());
+                            Toast.makeText(getContext(),"Removed " + w.getWord() + " from history :p",Toast.LENGTH_SHORT).show();
+                        }else if(w.getType() == 3){
+                            dbHandler.removeWOD(w.getId());
+                            Toast.makeText(getContext(),"Removed " + w.getWord() + " from WOD :-(",Toast.LENGTH_SHORT).show();
+                        }
+                        notifyDataSetChanged();
+                    }else{
+                        Toast.makeText(getContext(),"Delete is not enabled here :-)",Toast.LENGTH_SHORT).show();
+                    }
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                gestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
         });
 
 
