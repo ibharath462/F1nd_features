@@ -1,6 +1,8 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +49,9 @@ public class home extends Fragment {
     EditText searchText;
     JSONArray searchArray;
     ListView search_listView;
+    TextView wodWord,wodWordType;
+    static Resources res;
+    SharedPreferences prefs = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -136,10 +142,22 @@ public class home extends Fragment {
         dbHandler = new databaseHandler(getContext());
         search_listView = (ListView)getView().findViewById(R.id.search_listView);
         searchText = (EditText) getView().findViewById(R.id.searchText);
+        wodWord = (TextView)getView().findViewById(R.id.WODword);
+        wodWordType = (TextView)getView().findViewById(R.id.WODwordtype);
         searchArray = new JSONArray();
         searchArray = dbHandler.getHistory();
         Log.d("F1nd_MainActivity","Adapter count.." + searchArray.length() + "\n");
         words = new ArrayList<>();
+
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+        if(prefs.getBoolean("firstrun", true)){
+            wodWord.setText("Brb");
+            wodWordType.setText("is");
+        }else{
+            wodWord.setText("" + prefs.getString("wodWord","Brb").toString());
+            wodWordType.setText("" + prefs.getString("wodWordType","is").toString());
+        }
 
         for(int i=0; i<searchArray.length();i++){
             try {

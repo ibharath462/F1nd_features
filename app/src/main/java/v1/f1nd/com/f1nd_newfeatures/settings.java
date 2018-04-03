@@ -1,10 +1,12 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ public class settings extends Fragment {
     private String mParam2;
 
     Button saveSettings,startService;
+    boolean isServiceRuning = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,6 +124,16 @@ public class settings extends Fragment {
         saveSettings = (Button)getView().findViewById(R.id.saveSettings);
         startService = (Button)getView().findViewById(R.id.startService);
 
+        isServiceRuning = isMyServiceRunning(bgService.class);
+
+        if(isServiceRuning){
+            startService.setBackgroundColor(Color.RED);
+            startService.setText("Stop Service");
+        }else{
+            startService.setBackgroundColor(Color.GREEN);
+            startService.setText("Start Service");
+        }
+
         saveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,15 +148,37 @@ public class settings extends Fragment {
             public void onClick(View view) {
 
                 Intent service = new Intent(getActivity(),bgService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    getContext().startForegroundService(service);
-                    // Sets an ID for the notification, so it can be updated.
+                if(!isServiceRuning){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        getContext().startForegroundService(service);
 
-                } else {
-                    getContext().startService(service);
+                    } else {
+                        getContext().startService(service);
+                    }
+                    startService.setText("Stop Service");
+                    startService.setBackgroundColor(Color.RED);
+                }else{
+                    getContext().stopService(service);
+                    wodReceiver stopWOD = new wodReceiver();
+                    stopWOD.cancelAlarm(getContext());
+                    NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.cancelAll();
+                    startService.setText("Start Service");
+                    startService.setBackgroundColor(Color.GREEN);
                 }
+
 
             }
         });
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

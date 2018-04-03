@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -19,7 +21,9 @@ import org.json.JSONObject;
 
 public class wodReceiver extends BroadcastReceiver {
 
-    String word,meaning;
+    String word,meaning,wordType;
+    static Resources res;
+    SharedPreferences prefs = null;
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -29,7 +33,6 @@ public class wodReceiver extends BroadcastReceiver {
         wl.acquire();
 
         // Put here YOUR code.
-        Toast.makeText(context, "Alarm !!!!!!!!!!", Toast.LENGTH_LONG).show(); // For example
 
         wl.release();
 
@@ -39,10 +42,17 @@ public class wodReceiver extends BroadcastReceiver {
         try {
             word = wod.getString("word");
             meaning = wod.getString("meaning");
+            wordType = wod.getString("wordtype");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Log.d("F1nd_BCreceiver ","" +wod.toString());
+
+        //Adding to WOD shared preference...
+        res = context.getResources();
+        prefs = context.getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+        prefs.edit().putString("wodWord", word).commit();
+        prefs.edit().putString("wodWordType",wordType).commit();
 
         //Creating notification...
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -52,17 +62,20 @@ public class wodReceiver extends BroadcastReceiver {
             CharSequence name = "WOD";// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            Notification.Style style = new Notification.BigTextStyle().bigText(meaning);
             Notification notification = new Notification.Builder(context)
                     .setContentTitle("" + word)
                     .setContentText("" + meaning)
                     .setSmallIcon(R.drawable.heart_on)
                     .setContentText("" + meaning)
                     .setChannelId(CHANNEL_ID)
+                    .setStyle(style)
                     .setOngoing(true)
                     .build();
 
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.createNotificationChannel(mChannel);
+
             mNotificationManager.notify(notifyID,notification);
 
         } else {

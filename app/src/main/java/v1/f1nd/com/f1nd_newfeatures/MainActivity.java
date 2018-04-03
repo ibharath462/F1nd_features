@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         if(prefs.getBoolean("firstrun", true)){
+            prefs.edit().putString("wodWord", "Brb").commit();
+            prefs.edit().putString("wodWordType", "is").commit();
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             prefs.edit().putBoolean("firstrun", false).commit();

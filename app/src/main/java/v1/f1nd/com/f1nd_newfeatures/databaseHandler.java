@@ -171,6 +171,7 @@ public class databaseHandler extends SQLiteOpenHelper{
                 try {
                     wod.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
                     wod.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
+                    wod.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
                     wodId = cursor.getString(cursor.getColumnIndex(ID));
                 } catch (JSONException e) {
                     e.printStackTrace();
