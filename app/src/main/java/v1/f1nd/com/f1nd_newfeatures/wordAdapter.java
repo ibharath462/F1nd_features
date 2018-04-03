@@ -3,12 +3,17 @@ package v1.f1nd.com.f1nd_newfeatures;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,6 +46,9 @@ public class wordAdapter extends ArrayAdapter{
     private List<Word> wordDetails;
     databaseHandler dbHandler;
 
+    static Resources res;
+    SharedPreferences prefs = null;
+
 
 
     public wordAdapter(Context context, int resource,ArrayList<Word> objects) {
@@ -68,6 +76,7 @@ public class wordAdapter extends ArrayAdapter{
         dbHandler = new databaseHandler(getContext());
 
 
+
         favorite.setEnabled(true);
 
         favorite.setOnLikeListener(new OnLikeListener() {
@@ -91,7 +100,6 @@ public class wordAdapter extends ArrayAdapter{
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public boolean onLongClick(View vie) {
-                Toast.makeText(getContext(),"Long pressed " + word.getText().toString() + " " + w.getLiked(),Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
@@ -101,12 +109,13 @@ public class wordAdapter extends ArrayAdapter{
 
                 builder.setTitle("" + word.getText().toString())
                         .setMessage("" + w.getMeaning())
-                        .setIcon(android.R.drawable.btn_star)
                         .show();
                 return false;
             }
 
         });
+
+
 
 
         top_wrapper.setOnTouchListener(new View.OnTouchListener() {
@@ -127,6 +136,21 @@ public class wordAdapter extends ArrayAdapter{
                         Toast.makeText(getContext(),"Delete is not enabled here :-)",Toast.LENGTH_SHORT).show();
                     }
                     return super.onDoubleTap(e);
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+
+                    res = context.getResources();
+                    prefs = context.getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+                    prefs.edit().putString("id", "" + w.getId()).commit();
+
+                    android.support.v4.app.FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    meaning fragment = new meaning();
+                    fragmentTransaction.replace(R.id.content, fragment);
+                    fragmentTransaction.commit();
+                    return super.onSingleTapConfirmed(e);
                 }
             });
 

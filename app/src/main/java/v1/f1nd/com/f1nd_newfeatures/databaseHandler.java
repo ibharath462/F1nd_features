@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import org.json.JSONObject;
  * Created by bharath on 29/3/18.
  */
 
-public class databaseHandler extends SQLiteOpenHelper{
+public class databaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "dict.db";
@@ -28,9 +29,9 @@ public class databaseHandler extends SQLiteOpenHelper{
 
     private SQLiteDatabase database;
 
-    private  String DB_PATH = "";
+    private String DB_PATH = "";
 
-    private  String DB_NAME = "dict";
+    private String DB_NAME = "dict";
 
     private final Context myContext;
 
@@ -51,7 +52,7 @@ public class databaseHandler extends SQLiteOpenHelper{
         onCreate(sqLiteDatabase);
     }
 
-    public JSONArray getFavorites(){
+    public JSONArray getFavorites() {
         JSONArray resultArray = new JSONArray();
         Log.d("F1nd_DB: ", "Inside getFavorites");
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
@@ -64,10 +65,10 @@ public class databaseHandler extends SQLiteOpenHelper{
             do {
                 JSONObject tWord = new JSONObject();
                 try {
-                    tWord.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id",cursor.getString(cursor.getColumnIndex(ID)));
+                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -76,28 +77,28 @@ public class databaseHandler extends SQLiteOpenHelper{
         }
         database.close();
         Log.d("F1nd_DB: ", "result array of getFavorites " + resultArray.toString());
-        return  resultArray;
+        return resultArray;
     }
 
-    public JSONArray searchWord(String q){
+    public JSONArray searchWord(String q) {
         JSONArray resultArray = new JSONArray();
         Log.d("F1nd_DB: ", "Inside searchTerm " + q);
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER("+WORD+") LIKE '" + q.toUpperCase() + "%' limit 20;";
+        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER(" + WORD + ") LIKE '" + q.toUpperCase() + "%' limit 20;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 JSONObject tWord = new JSONObject();
                 try {
-                    tWord.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id",cursor.getString(cursor.getColumnIndex(ID)));
-                    if(cursor.getString(cursor.getColumnIndex(FID)) != null){
-                        tWord.put("fid",cursor.getString(cursor.getColumnIndex(FID)));
+                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -107,29 +108,47 @@ public class databaseHandler extends SQLiteOpenHelper{
         }
         database.close();
         Log.d("F1nd_DB: ", "result array of search word " + resultArray.toString());
-        return  resultArray;
+        return resultArray;
     }
 
-    public void addFavorite(Long id){
+    public void addFavorite(Long id) {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        ContentValues cv=new ContentValues();
-        cv.put("id",id);
+        ContentValues cv = new ContentValues();
+        cv.put("id", id);
         database.insert("favorites_mapping", null, cv);
         Log.d("F1nd_DB:", "Favorites added succesfull " + id);
         database.close();
     }
 
-    public void removeFavorite(Long id){
+
+    public void removeFavorite(Long id) {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        database.delete("favorites_mapping","id=" + id,null);
+        database.delete("favorites_mapping", "id=" + id, null);
         database.close();
     }
 
-    public JSONArray getHistory(){
+    public void addHistory(Long id) {
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        //Check if there is already an entry..
+        String selectQuery = "select * from history_mapping where id=" + id;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (!cursor.moveToFirst()) {
+            ContentValues cv = new ContentValues();
+            cv.put("id", id);
+            database.insert("history_mapping", null, cv);
+            Log.d("F1nd_DB:", "History added succesfull " + id);
+        }
+        database.close();
+    }
+
+    public JSONArray getHistory() {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -140,12 +159,12 @@ public class databaseHandler extends SQLiteOpenHelper{
             do {
                 JSONObject tWord = new JSONObject();
                 try {
-                    tWord.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id",cursor.getString(cursor.getColumnIndex(ID)));
-                    if(cursor.getString(cursor.getColumnIndex(FID)) != null){
-                        tWord.put("fid",cursor.getString(cursor.getColumnIndex(FID)));
+                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -155,26 +174,26 @@ public class databaseHandler extends SQLiteOpenHelper{
         }
         database.close();
         Log.d("F1nd_DB: ", "result array of history" + resultArray.toString());
-        return  resultArray;
+        return resultArray;
     }
 
-    public void removeHistory(Long id){
+    public void removeHistory(Long id) {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        database.delete("history_mapping","id=" + id,null);
+        database.delete("history_mapping", "id=" + id, null);
         database.close();
     }
 
-    public void removeWOD(Long id){
+    public void removeWOD(Long id) {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        database.delete("wod_mapping","id=" + id,null);
+        database.delete("wod_mapping", "id=" + id, null);
         database.close();
     }
 
-    public JSONObject getWordOfTheDay(){
+    public JSONObject getWordOfTheDay() {
         JSONObject wod = new JSONObject();
         String wodId = "";
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
@@ -185,9 +204,9 @@ public class databaseHandler extends SQLiteOpenHelper{
         if (cursor.moveToFirst()) {
             do {
                 try {
-                    wod.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
-                    wod.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
-                    wod.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    wod.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    wod.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    wod.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
                     wodId = cursor.getString(cursor.getColumnIndex(ID));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,16 +215,16 @@ public class databaseHandler extends SQLiteOpenHelper{
         }
 
         //Adding details in the WOD table...
-        ContentValues cv=new ContentValues();
-        cv.put("id",wodId);
+        ContentValues cv = new ContentValues();
+        cv.put("id", wodId);
         database.insert("wod_mapping", null, cv);
         Log.d("F1nd_DB:", "WOD added succesfull " + wodId);
         database.close();
 
-        return  wod;
+        return wod;
     }
 
-    public JSONArray getWordsOfDays(){
+    public JSONArray getWordsOfDays() {
         JSONArray resultArray = new JSONArray();
         Log.d("F1nd_DB: ", "Inside getWordsOfDays");
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
@@ -218,12 +237,12 @@ public class databaseHandler extends SQLiteOpenHelper{
             do {
                 JSONObject tWord = new JSONObject();
                 try {
-                    tWord.put("word",cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning",cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype",cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id",cursor.getString(cursor.getColumnIndex(ID)));
-                    if(cursor.getString(cursor.getColumnIndex(FID)) != null){
-                        tWord.put("fid",cursor.getString(cursor.getColumnIndex(FID)));
+                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,6 +252,37 @@ public class databaseHandler extends SQLiteOpenHelper{
         }
         database.close();
         Log.d("F1nd_DB: ", "result array of getWordsOfDays " + resultArray.toString());
-        return  resultArray;
+        return resultArray;
+    }
+
+    public JSONArray getMeaning(Long id) {
+        JSONArray resultArray = new JSONArray();
+        Log.d("F1nd_DB: ", "Inside getMeaning " + id);
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        Log.d("F1nd_DB: ", "path " + myPath);
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE dict.id=" + id;
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject tWord = new JSONObject();
+                try {
+                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                resultArray.put(tWord);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        Log.d("F1nd_DB: ", "result array of get menaning of  word " + resultArray.toString());
+        return resultArray;
+
     }
 }
