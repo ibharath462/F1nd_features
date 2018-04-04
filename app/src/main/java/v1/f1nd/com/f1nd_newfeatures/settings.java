@@ -20,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
@@ -45,10 +47,11 @@ public class settings extends Fragment {
     Button startService,saveSettings;
     boolean isServiceRuning = false;
     EditText timeInterval;
-    CheckedTextView isCopyListener;
 
     static Resources res;
     SharedPreferences prefs = null;
+
+    Switch eCopy,eLaW;
 
     private OnFragmentInteractionListener mListener;
 
@@ -138,12 +141,18 @@ public class settings extends Fragment {
 
         timeInterval = (EditText)getView().findViewById(R.id.wodInterval);
 
-        isCopyListener = (CheckedTextView)getView().findViewById(R.id.isCopyListener);
+        eCopy = (Switch)getView().findViewById(R.id.eCopy);
+
+        eLaW = (Switch)getView().findViewById(R.id.eLaW);
+
 
         isServiceRuning = isMyServiceRunning(bgService.class);
         ;
         res = getResources();
         prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        eCopy.setChecked(prefs.getBoolean("isCopyListener",false));
+        eLaW.setChecked(prefs.getBoolean("isLaWEnabled",false));
 
         Long wodInterval = Long.parseLong(prefs.getString("wodInterval", "5"));
 
@@ -165,7 +174,20 @@ public class settings extends Fragment {
                 Log.d("F1nd_Settings ","Settings saved");
                 Toast.makeText(getContext(),"Settings saved :-)",Toast.LENGTH_SHORT).show();
                 prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
-                prefs.edit().putBoolean("isCopyListener", isCopyListener.isChecked()).commit();
+            }
+        });
+
+        eCopy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean("isCopyListener", b).commit();
+            }
+        });
+
+        eLaW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean("isLaWEnabled", b).commit();
             }
         });
 
@@ -175,7 +197,11 @@ public class settings extends Fragment {
 
                 Intent service = new Intent(getActivity(),bgService.class);
                 if(!isServiceRuning){
-                    prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
+                    if(null != timeInterval.getText().toString() && timeInterval.getText().toString().equals("")){
+                        prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
+                    }else{
+                        prefs.edit().putString("wodInterval", "" + 15).commit();
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         getContext().startForegroundService(service);
 
@@ -197,7 +223,6 @@ public class settings extends Fragment {
                     startService.setBackgroundColor(Color.GREEN);
                     Log.d("F1nd_Settings ","Service stopped");
                 }
-                prefs.edit().putBoolean("isCopyListener", isCopyListener.isChecked()).commit();
 
             }
         });

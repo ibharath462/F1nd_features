@@ -36,60 +36,69 @@ public class wodReceiver extends BroadcastReceiver {
 
         wl.release();
 
-        //Getting a random word...
-        databaseHandler dbHandler = new databaseHandler(context);
-        JSONObject wod = dbHandler.getWordOfTheDay();
-        try {
-            word = wod.getString("word");
-            meaning = wod.getString("meaning");
-            wordType = wod.getString("wordtype");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        meaning = meaning.replaceAll("^ +| +$|( )+", " ");
-        meaning = meaning.replace("\n", "").replace("\r", "");
-        Log.d("F1nd_BCreceiver ","" +wod.toString());
-
-        //Adding to WOD shared preference...
         res = context.getResources();
         prefs = context.getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
-        prefs.edit().putString("wodWord", word).commit();
-        prefs.edit().putString("wodWordType",wordType).commit();
 
-        //Creating notification...
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        boolean isLaW = prefs.getBoolean("isLaWEnabled",false);
 
-            int notifyID = 1;
-            String CHANNEL_ID = "my_channel_01";// The id of the channel.
-            CharSequence name = "WOD";// The user-visible name of the channel.
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            Notification.Style style = new Notification.BigTextStyle().bigText(meaning);
-            Notification notification = new Notification.Builder(context)
-                    .setContentTitle("" + word)
-                    .setContentText("" + meaning)
-                    .setSmallIcon(R.drawable.heart_on)
-                    .setChannelId(CHANNEL_ID)
-                    .setStyle(style)
-                    .setOngoing(true)
-                    .build();
+        if(isLaW){
 
-            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.createNotificationChannel(mChannel);
+            //Getting a random word...
+            databaseHandler dbHandler = new databaseHandler(context);
+            JSONObject wod = dbHandler.getWordOfTheDay();
+            try {
+                word = wod.getString("word");
+                meaning = wod.getString("meaning");
+                wordType = wod.getString("wordtype");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            meaning = meaning.replaceAll("^ +| +$|( )+", " ");
+            meaning = meaning.replace("\n", "").replace("\r", "");
+            Log.d("F1nd_BCreceiver ","" +wod.toString());
 
-            mNotificationManager.notify(notifyID,notification);
+            //Adding to WOD shared preference...
+            prefs.edit().putString("wodWord", word).commit();
+            prefs.edit().putString("wodWordType",wordType).commit();
 
-        } else {
+            //Creating notification...
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setContentTitle("WOD_check")
-                    .setContentText("Hello WOD")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true);
+                int notifyID = 1;
+                String CHANNEL_ID = "my_channel_01";// The id of the channel.
+                CharSequence name = "WOD";// The user-visible name of the channel.
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                Notification.Style style = new Notification.BigTextStyle().bigText(meaning);
+                Notification notification = new Notification.Builder(context)
+                        .setContentTitle("" + word)
+                        .setContentText("" + meaning)
+                        .setSmallIcon(R.drawable.heart_on)
+                        .setChannelId(CHANNEL_ID)
+                        .setStyle(style)
+                        .setOngoing(true)
+                        .build();
 
-            Notification notification = builder.build();
-            //notification.notify();
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.createNotificationChannel(mChannel);
+
+                mNotificationManager.notify(notifyID,notification);
+
+            } else {
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                        .setContentTitle("WOD_check")
+                        .setContentText("Hello WOD")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setAutoCancel(true);
+
+                Notification notification = builder.build();
+                //notification.notify();
+            }
+
         }
+
+
     }
 
     public void setAlarm(Context context)

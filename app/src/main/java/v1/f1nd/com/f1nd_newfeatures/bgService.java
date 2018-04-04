@@ -58,32 +58,38 @@ public class bgService extends Service {
             CharSequence name = "WOD";// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            Notification.Style style = new Notification.BigTextStyle().bigText(meaning);
+            Notification.Style style = new Notification.BigTextStyle().bigText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning");
             Notification notification = new Notification.Builder(getApplicationContext())
-                    .setContentTitle("" + word)
-                    .setContentText("" + meaning)
+                    .setContentTitle("F1nd")
+                    .setContentText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning")
                     .setSmallIcon(R.drawable.heart_on)
                     .setChannelId(CHANNEL_ID)
                     .setStyle(style)
                     .setOngoing(true)
                     .build();
 
+
             startForeground(1, notification);
 
         } else {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText("Hello")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true);
+                    .setContentTitle("F1nd")
+                    .setContentText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning")
+                    .setSmallIcon(R.drawable.heart_on)
+                    .setOngoing(true);
 
             Notification notification = builder.build();
 
             startForeground(1, notification);
         }
-        alarmReceiver.setAlarm(this);
-        Toast.makeText(getApplicationContext(),"F1nd service started",Toast.LENGTH_SHORT).show();
+        if(prefs.getBoolean("isLaWEnabled",false)){
+            alarmReceiver.setAlarm(this);
+            Toast.makeText(getApplicationContext(),"F1nd service started with" +
+                    " LaW",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(),"F1nd service started without LaW",Toast.LENGTH_SHORT).show();
+        }
         return START_NOT_STICKY;
     }
 

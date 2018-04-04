@@ -1,4 +1,4 @@
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         tools:context="v1.f1nd.com.f1nd_newfeatures.settings"
@@ -6,7 +6,117 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="28sp"
+            android:textColor="@android:color/black"
+            android:text="Enable Learn a Word : " />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Switch
+            android:id="@+id/eLaW"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+             />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="28sp"
+            android:textColor="@android:color/black"
+            android:text="Copy to F1nd?" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Switch
+            android:id="@+id/eCopy"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="28sp"
+            android:textColor="@android:color/black"
+            android:text="Interval for LaW(mins)" />
+
+
+
+        <EditText
+            android:id="@+id/wodInterval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_centerInParent="true"
+            android:ellipsize="start"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:maxLength="2"
+            android:inputType="numberSigned" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/saveSettings"
+        android:layout_width="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="Save" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <Button
         android:id="@+id/startService"
@@ -16,46 +126,10 @@
         android:layout_height="wrap_content"
         android:text="Start service" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="32sp"
-        android:layout_marginTop="101dp"
-        android:text="Choose time interval for WOD (in mins)" />
+    </RelativeLayout>
 
-    <EditText
-        android:id="@+id/wodInterval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:gravity="center"
-        android:maxLength="2"
-        android:inputType="numberSigned" />
 
-    <Button
-        android:id="@+id/saveSettings"
-        android:layout_width="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/wodInterval"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:text="Save" />
 
-    <CheckedTextView
-        android:id="@+id/isCopyListener"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_below="@+id/wodInterval"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:text="Copy word to F1nd ?" />
 
-</RelativeLayout>
+
+</LinearLayout>
