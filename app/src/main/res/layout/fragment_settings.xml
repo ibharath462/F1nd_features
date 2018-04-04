@@ -7,16 +7,6 @@
         android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/saveSettings"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="54dp"
-        android:background="@android:color/holo_blue_bright"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_above="@+id/startService"
-        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/startService"
@@ -25,5 +15,47 @@
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         android:text="Start service" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="32sp"
+        android:layout_marginTop="101dp"
+        android:text="Choose time interval for WOD (in mins)" />
+
+    <EditText
+        android:id="@+id/wodInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:gravity="center"
+        android:maxLength="2"
+        android:inputType="numberSigned" />
+
+    <Button
+        android:id="@+id/saveSettings"
+        android:layout_width="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wodInterval"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="Save" />
+
+    <CheckedTextView
+        android:id="@+id/isCopyListener"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_below="@+id/wodInterval"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="Copy word to F1nd ?" />
 
 </RelativeLayout>

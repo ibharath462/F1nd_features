@@ -6,16 +6,22 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 /**
@@ -36,8 +42,13 @@ public class settings extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button saveSettings,startService;
+    Button startService,saveSettings;
     boolean isServiceRuning = false;
+    EditText timeInterval;
+    CheckedTextView isCopyListener;
+
+    static Resources res;
+    SharedPreferences prefs = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -121,10 +132,24 @@ public class settings extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        saveSettings = (Button)getView().findViewById(R.id.saveSettings);
         startService = (Button)getView().findViewById(R.id.startService);
 
+        saveSettings = (Button)getView().findViewById(R.id.saveSettings);
+
+        timeInterval = (EditText)getView().findViewById(R.id.wodInterval);
+
+        isCopyListener = (CheckedTextView)getView().findViewById(R.id.isCopyListener);
+
         isServiceRuning = isMyServiceRunning(bgService.class);
+        ;
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        Long wodInterval = Long.parseLong(prefs.getString("wodInterval", "5"));
+
+        Log.d("F1nd_Settings ","Inside settings activity");
+
+        timeInterval.setText("" + wodInterval);
 
         if(isServiceRuning){
             startService.setBackgroundColor(Color.RED);
@@ -137,9 +162,10 @@ public class settings extends Fragment {
         saveSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
+                Log.d("F1nd_Settings ","Settings saved");
+                Toast.makeText(getContext(),"Settings saved :-)",Toast.LENGTH_SHORT).show();
+                prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
+                prefs.edit().putBoolean("isCopyListener", isCopyListener.isChecked()).commit();
             }
         });
 
@@ -149,6 +175,7 @@ public class settings extends Fragment {
 
                 Intent service = new Intent(getActivity(),bgService.class);
                 if(!isServiceRuning){
+                    prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         getContext().startForegroundService(service);
 
@@ -157,6 +184,8 @@ public class settings extends Fragment {
                     }
                     startService.setText("Stop Service");
                     startService.setBackgroundColor(Color.RED);
+                    isServiceRuning = true;
+                    Log.d("F1nd_Settings ","Started service");
                 }else{
                     getContext().stopService(service);
                     wodReceiver stopWOD = new wodReceiver();
@@ -164,9 +193,11 @@ public class settings extends Fragment {
                     NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     mNotificationManager.cancelAll();
                     startService.setText("Start Service");
+                    isServiceRuning = false;
                     startService.setBackgroundColor(Color.GREEN);
+                    Log.d("F1nd_Settings ","Service stopped");
                 }
-
+                prefs.edit().putBoolean("isCopyListener", isCopyListener.isChecked()).commit();
 
             }
         });

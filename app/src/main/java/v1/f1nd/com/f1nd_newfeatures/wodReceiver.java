@@ -46,6 +46,8 @@ public class wodReceiver extends BroadcastReceiver {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        meaning = meaning.replaceAll("^ +| +$|( )+", " ");
+        meaning = meaning.replace("\n", "").replace("\r", "");
         Log.d("F1nd_BCreceiver ","" +wod.toString());
 
         //Adding to WOD shared preference...
@@ -67,7 +69,6 @@ public class wodReceiver extends BroadcastReceiver {
                     .setContentTitle("" + word)
                     .setContentText("" + meaning)
                     .setSmallIcon(R.drawable.heart_on)
-                    .setContentText("" + meaning)
                     .setChannelId(CHANNEL_ID)
                     .setStyle(style)
                     .setOngoing(true)
@@ -93,10 +94,12 @@ public class wodReceiver extends BroadcastReceiver {
 
     public void setAlarm(Context context)
     {
+        prefs = context.getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+        Long wodInterval = Long.parseLong(prefs.getString("wodInterval", "5"));
         AlarmManager am =( AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, wodReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 1, pi); // Millisec * Second * Minute
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * wodInterval, pi); // Millisec * Second * Minute
     }
 
     public void cancelAlarm(Context context)
