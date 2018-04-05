@@ -16,8 +16,8 @@
         card_view:cardUseCompatPadding="true"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp">
+        android:layout_height="100dp"
+        card_view:cardCornerRadius="7dp">
 
         <!-- Bottom View End-->
 
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:text="Hello"
                     android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:id="@+id/word"/>
 
@@ -57,7 +57,7 @@
                     android:text="adv."
                     android:layout_marginLeft="20dp"
                     android:textColor="@android:color/black"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="italic"
                     android:id="@+id/wordtype"/>
 
@@ -71,7 +71,7 @@
 
                 <com.like.LikeButton
                     app:icon_type="heart"
-                    app:icon_size="50dp"
+                    app:icon_size="24dp"
                     app:anim_scale_factor="5"
                     android:id="@+id/favorite"
                     android:layout_width="wrap_content"

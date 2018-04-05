@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -129,7 +130,7 @@ public class meaning extends Fragment {
 
         //Setting the word & meaning...
         TextView word = (TextView)getView().findViewById(R.id.word);
-        TextView meaning = (TextView)getView().findViewById(R.id.meaning);
+        TextView meaning = (EditText)getView().findViewById(R.id.meaning);
         TextView wordtype = (TextView)getView().findViewById(R.id.wordType);
 
         JSONArray resM = dbHandler.getMeaning(id);
@@ -146,6 +147,10 @@ public class meaning extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        meaning.setTextIsSelectable(true);
+
+
         Log.d("F1nd_meaning","Added to history  " + String.valueOf(id) + "\n");
     }
 }

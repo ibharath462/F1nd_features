@@ -108,14 +108,6 @@ public class MainActivity extends AppCompatActivity{
 
         prefs = getSharedPreferences("f1nd.initial.bharath.newUI", MODE_PRIVATE);
 
-//        if(!prefs.getBoolean("firstrun", false)) {
-//            setActionBar("F1nd");
-//            ft = getSupportFragmentManager().beginTransaction();
-//            currentFragment = new home();
-//            ft.replace(R.id.content, currentFragment);
-//            ft.commit();
-//        }
-
 
         if(prefs.getBoolean("firstrun", true)){
             prefs.edit().putString("wodWord", "Brb").commit();
@@ -123,11 +115,17 @@ public class MainActivity extends AppCompatActivity{
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             prefs.edit().putBoolean("firstrun", false).commit();
+        }else{
+            setActionBar("F1nd");
+            ft = getSupportFragmentManager().beginTransaction();
+            currentFragment = new home();
+            ft.replace(R.id.content, currentFragment);
+            ft.commit();
         }
 
 
 
-
+        getDelegate().setHandleNativeActionModesEnabled(false);
 
 
 

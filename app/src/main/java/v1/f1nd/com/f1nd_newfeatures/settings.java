@@ -197,7 +197,7 @@ public class settings extends Fragment {
 
                 Intent service = new Intent(getActivity(),bgService.class);
                 if(!isServiceRuning){
-                    if(null != timeInterval.getText().toString() && timeInterval.getText().toString().equals("")){
+                    if(null != timeInterval.getText().toString() && !timeInterval.getText().toString().equals("")){
                         prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
                     }else{
                         prefs.edit().putString("wodInterval", "" + 15).commit();
