@@ -36,22 +36,37 @@ public class bgService extends Service {
 
         res = getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
-        String word="",wordType="",meaning="";
+        String word="",wordType="";
         databaseHandler dbHandler = new databaseHandler(getApplicationContext());
         JSONObject wod = dbHandler.getWordOfTheDay();
         try {
             word = wod.getString("word");
-            meaning = wod.getString("meaning");
             wordType = wod.getString("wordtype");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        meaning = meaning.replaceAll("^ +| +$|( )+", " ");
-        meaning = meaning.replace("\n", "").replace("\r", "");
         Log.d("F1nd_bgServie ","Fetching WOD" +wod.toString());
         prefs.edit().putString("wodWord", word).commit();
         prefs.edit().putString("wodWordType",wordType).commit();
 
+        createNotification();
+
+        if(prefs.getBoolean("isLaWEnabled",false)){
+            alarmReceiver.setAlarm(this);
+            Toast.makeText(getApplicationContext(),"F1nd service started with" +
+                    " LaW",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(),"F1nd service started without LaW",Toast.LENGTH_SHORT).show();
+        }
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+    }
+
+    public void createNotification(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             String CHANNEL_ID = "my_channel_01";// The id of the channel.
@@ -83,18 +98,5 @@ public class bgService extends Service {
 
             startForeground(1, notification);
         }
-        if(prefs.getBoolean("isLaWEnabled",false)){
-            alarmReceiver.setAlarm(this);
-            Toast.makeText(getApplicationContext(),"F1nd service started with" +
-                    " LaW",Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(),"F1nd service started without LaW",Toast.LENGTH_SHORT).show();
-        }
-        return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
     }
 }

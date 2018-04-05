@@ -255,20 +255,21 @@ public class databaseHandler extends SQLiteOpenHelper {
         return resultArray;
     }
 
-    public JSONArray getMeaning(Long id) {
+    public JSONArray getMeaning(String meaningSearchWord) {
         JSONArray resultArray = new JSONArray();
-        Log.d("F1nd_DB: ", "Inside getMeaning " + id);
+        Log.d("F1nd_DB: ", "Inside getMeaning " + meaningSearchWord);
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE dict.id=" + id;
+        String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER(" + WORD + ") = '" + meaningSearchWord.toUpperCase() + "' limit 10;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 JSONObject tWord = new JSONObject();
                 try {
                     tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
                     tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
                     tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
                     if (cursor.getString(cursor.getColumnIndex(FID)) != null) {

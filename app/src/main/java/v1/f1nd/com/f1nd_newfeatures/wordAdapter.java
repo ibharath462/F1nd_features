@@ -144,6 +144,7 @@ public class wordAdapter extends ArrayAdapter{
                     res = context.getResources();
                     prefs = context.getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
                     prefs.edit().putString("id", "" + w.getId()).commit();
+                    prefs.edit().putString("meaningSearchWord", "" + w.getWord()).commit();
 
                     android.support.v4.app.FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                     android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -11,11 +11,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -39,6 +44,9 @@ public class meaning extends Fragment {
     static Resources res;
     SharedPreferences prefs = null;
     databaseHandler dbHandler;
+
+    ArrayAdapter<meaningBean> adapter=null;
+    ArrayList<meaningBean> meaningAL;
 
     private OnFragmentInteractionListener mListener;
 
@@ -130,27 +138,35 @@ public class meaning extends Fragment {
 
         //Setting the word & meaning...
         TextView word = (TextView)getView().findViewById(R.id.word);
-        TextView meaning = (EditText)getView().findViewById(R.id.meaning);
-        TextView wordtype = (TextView)getView().findViewById(R.id.wordType);
+        ListView meaning_listView = (ListView)getView().findViewById(R.id.meaning_listView);
 
-        JSONArray resM = dbHandler.getMeaning(id);
+        JSONArray resM = dbHandler.getMeaning(prefs.getString("meaningSearchWord","1"));
+        meaningAL = new ArrayList<>();
 
         try {
             word.setText("" + resM.getJSONObject(0).getString("word"));
-            wordtype.setText("" + resM.getJSONObject(0).getString("wordtype"));
             for(int i=0; i<resM.length(); i++){
-                String meaningString = resM.getJSONObject(i).getString("meaning");
+                JSONObject tWord = resM.getJSONObject(i);
+                String meaningString = tWord.getString("meaning");
                 meaningString = meaningString.replaceAll("^ +| +$|( )+", " ");
                 meaningString = meaningString.replace("\n", "").replace("\r", "");
-                meaning.append(meaningString);
+                boolean isLiked = false;
+                if(tWord.has("fid")){
+                    isLiked = true;
+                }
+
+                meaningAL.add(new meaningBean(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),meaningString,isLiked));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        meaning.setTextIsSelectable(true);
+        Log.d("F1nd_Meaning adapter" , "" + meaningAL.size());
+
+        adapter = new meaningAdapter(getContext(), 0, meaningAL);
+        meaning_listView.setAdapter(adapter);
 
 
-        Log.d("F1nd_meaning","Added to history  " + String.valueOf(id) + "\n");
+
     }
 }

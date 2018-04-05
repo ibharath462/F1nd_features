@@ -105,27 +105,44 @@ public class MainActivity extends AppCompatActivity{
 
         res = getResources();
 
+        CharSequence receivedProcessText = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT);
+        getDelegate().setHandleNativeActionModesEnabled(false);
 
-        prefs = getSharedPreferences("f1nd.initial.bharath.newUI", MODE_PRIVATE);
+        if(receivedProcessText != null){
 
-
-        if(prefs.getBoolean("firstrun", true)){
-            prefs.edit().putString("wodWord", "Brb").commit();
-            prefs.edit().putString("wodWordType", "is").commit();
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            prefs.edit().putBoolean("firstrun", false).commit();
-        }else{
-            setActionBar("F1nd");
+            //From Process text...
+            Log.d("F1nd_MainActivity", "From processed text...");
+            String processedText = receivedProcessText.toString();
             ft = getSupportFragmentManager().beginTransaction();
-            currentFragment = new home();
+            currentFragment = new meaning();
             ft.replace(R.id.content, currentFragment);
             ft.commit();
+
+        }else{
+
+            //From UI
+            Log.d("F1nd_MainActivity", "From UI...");
+            prefs = getSharedPreferences("f1nd.initial.bharath.newUI", MODE_PRIVATE);
+
+
+            if(prefs.getBoolean("firstrun", true)){
+                prefs.edit().putString("wodWord", "Brb").commit();
+                prefs.edit().putString("wodWordType", "is").commit();
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                prefs.edit().putBoolean("firstrun", false).commit();
+            }else{
+                setActionBar("F1nd");
+                ft = getSupportFragmentManager().beginTransaction();
+                currentFragment = new home();
+                ft.replace(R.id.content, currentFragment);
+                ft.commit();
+            }
+
         }
 
 
 
-        getDelegate().setHandleNativeActionModesEnabled(false);
 
 
 
@@ -196,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
                     startActivityForResult(intent, 1234);
                 }catch (ActivityNotFoundException e){
 
-                    Log.d("RestartServiceReceiver", "Exception" + e );
+                    Log.d("F1nd_MainActivity", "Exception" + e );
                 }
 
             }
