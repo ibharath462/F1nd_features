@@ -30,12 +30,17 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:dropDownHeight="200dp"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:textIsSelectable="false"
+                    android:enabled="false"
                     android:text="Hello"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
@@ -61,4 +66,6 @@
         </ListView>
 
     </LinearLayout>
+
+
 </RelativeLayout>

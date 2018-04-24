@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -137,7 +138,7 @@ public class meaning extends Fragment {
         dbHandler.addHistory(id);
 
         //Setting the word & meaning...
-        TextView word = (TextView)getView().findViewById(R.id.word);
+        AutoCompleteTextView word = (AutoCompleteTextView) getView().findViewById(R.id.word);
         ListView meaning_listView = (ListView)getView().findViewById(R.id.meaning_listView);
 
         JSONArray resM = dbHandler.getMeaning(prefs.getString("meaningSearchWord","1"));

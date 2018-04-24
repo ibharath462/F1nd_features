@@ -7,12 +7,19 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +27,10 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.graphics.Color.*;
 
@@ -29,9 +38,13 @@ public class popupMeaning extends Activity {
 
     static Resources res;
     SharedPreferences prefs = null;
+    AutoCompleteTextView word;
+    ListView meaning_listView;
+    String sword;
     ArrayAdapter<meaningBean> adapter=null;
     databaseHandler dbHandler;
     ArrayList<meaningBean> meaningAL;
+    JSONArray searchArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +63,7 @@ public class popupMeaning extends Activity {
 
         //Getting the process text...
 
-        String sword = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString().trim();
+        sword = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString().trim();
         Toast.makeText(getApplicationContext(),"" + sword,Toast.LENGTH_SHORT).show();
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
@@ -61,14 +74,56 @@ public class popupMeaning extends Activity {
 //        dbHandler.addHistory(id);
 
         //Setting the word & meaning...
-        TextView word = (TextView)findViewById(R.id.word);
-        ListView meaning_listView = (ListView)findViewById(R.id.meaning_listView);
+        word = (AutoCompleteTextView) findViewById(R.id.word);
+        meaning_listView = (ListView)findViewById(R.id.meaning_listView);
+
+        word.setEnabled(true);
+        word.setTextIsSelectable(true);
+        word.setText(sword);
+
+        word.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                runOnBG bgThread = new runOnBG();
+
+                bgThread.execute(charSequence.toString());
+
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if(!sword.equals(word)){
+                    sword = word.getText().toString();
+                    setContent();
+                }
+
+            }
+        });
+
+
+        setContent();
+
+
+
+    }
+
+
+    public void setContent(){
+
 
         JSONArray resM = dbHandler.getMeaning(sword);
         meaningAL = new ArrayList<>();
 
         try {
-            word.setText("" + resM.getJSONObject(0).getString("word"));
             for(int i=0; i<resM.length(); i++){
                 JSONObject tWord = resM.getJSONObject(i);
                 String meaningString = tWord.getString("meaning");
@@ -90,8 +145,67 @@ public class popupMeaning extends Activity {
         adapter = new meaningAdapter(getApplicationContext(), 0, meaningAL);
         meaning_listView.setAdapter(adapter);
 
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (MotionEvent.ACTION_OUTSIDE == event.getAction()) {
+            finish();
+            return true;
+        }
+
+        // Delegate everything else to Activity.
+        return super.onTouchEvent(event);
+    }
+
+    public  class runOnBG extends AsyncTask<String,String,String>{
+
+        ArrayAdapter<String> adapter;
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            searchArray = dbHandler.searchWord(params[0]);
+
+            String[] suggestions;
+
+            List<String> tList = new ArrayList<>();
+
+            if(searchArray.length() > 0){
+
+                for(int c=0; c<searchArray.length();c++){
+
+                    try {
+                        JSONObject tWord = searchArray.getJSONObject(c);
+                        tList.add(tWord.getString("word"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                suggestions = tList.toArray(new String[0]);
+
+                adapter = new ArrayAdapter<String>(popupMeaning.this, android.R.layout.simple_dropdown_item_1line, suggestions);
 
 
 
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            word.setAdapter(adapter);
+
+            adapter.notifyDataSetChanged();
+
+            
+            super.onPostExecute(s);
+        }
     }
 }
