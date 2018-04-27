@@ -61,12 +61,16 @@ public class popupMeaning extends Activity {
         getWindow().setAttributes(wlp);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(255,148,0,211)));
 
-        //Getting the process text...
-
-        sword = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString().trim();
-        Toast.makeText(getApplicationContext(),"" + sword,Toast.LENGTH_SHORT).show();
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        //Getting the process text...
+        if(getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT) != null){
+            sword = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT).toString().trim();
+        }else{
+            sword = prefs.getString("meaningSearchWord","ROFL");
+        }
+        Toast.makeText(getApplicationContext(),"" + sword,Toast.LENGTH_SHORT).show();
 
         dbHandler = new databaseHandler(getApplicationContext());
 
@@ -202,9 +206,6 @@ public class popupMeaning extends Activity {
 
             word.setAdapter(adapter);
 
-            adapter.notifyDataSetChanged();
-
-            
             super.onPostExecute(s);
         }
     }

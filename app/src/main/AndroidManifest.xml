@@ -37,9 +37,7 @@
 
         <activity
             android:name=".popupMeaning"
-            android:theme="@android:style/Theme.Dialog"
-            >
-
+            android:theme="@android:style/Theme.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 
@@ -47,8 +45,12 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
         </activity>
+
+        <service
+            android:name=".clipboardService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

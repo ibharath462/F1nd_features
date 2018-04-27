@@ -107,8 +107,15 @@ public class wordAdapter extends ArrayAdapter{
                     builder = new AlertDialog.Builder(getContext());
                 }
 
+                String meaning = w.getMeaning();
+                meaning = meaning.trim();
+                meaning = meaning.replaceAll("\\d","");
+                meaning = meaning.replaceAll("[^a-zA-Z]"," ");
+                meaning = meaning.replaceAll("^ +| +$|( )+", " ");
+                meaning = meaning.replace("\n", "").replace("\r", "");
+
                 builder.setTitle("" + word.getText().toString())
-                        .setMessage("" + w.getMeaning())
+                        .setMessage("" + meaning)
                         .show();
                 return false;
             }

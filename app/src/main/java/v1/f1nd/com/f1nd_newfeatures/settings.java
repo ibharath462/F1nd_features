@@ -48,6 +48,7 @@ public class settings extends Fragment {
     boolean isServiceRuning = false;
     EditText timeInterval;
 
+
     static Resources res;
     SharedPreferences prefs = null;
 
@@ -156,6 +157,7 @@ public class settings extends Fragment {
 
         Long wodInterval = Long.parseLong(prefs.getString("wodInterval", "5"));
 
+
         Log.d("F1nd_Settings ","Inside settings activity");
 
         timeInterval.setText("" + wodInterval);
@@ -196,6 +198,8 @@ public class settings extends Fragment {
             public void onClick(View view) {
 
                 Intent service = new Intent(getActivity(),bgService.class);
+                Intent clipBoardService = new Intent(getActivity(),clipboardService.class);
+
                 if(!isServiceRuning){
                     if(null != timeInterval.getText().toString() && !timeInterval.getText().toString().equals("")){
                         prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
@@ -204,9 +208,15 @@ public class settings extends Fragment {
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         getContext().startForegroundService(service);
+                        if(prefs.getBoolean("isCopyListener",false)){
+                            getContext().startForegroundService(clipBoardService);
+                        }
 
                     } else {
                         getContext().startService(service);
+                        if(prefs.getBoolean("isCopyListener",false)){
+                            getContext().startService(clipBoardService);
+                        }
                     }
                     startService.setText("Stop Service");
                     startService.setBackgroundColor(Color.RED);
@@ -214,6 +224,12 @@ public class settings extends Fragment {
                     Log.d("F1nd_Settings ","Started service");
                 }else{
                     getContext().stopService(service);
+
+                    if(isMyServiceRunning(clipboardService.class)){
+                        getContext().stopService(clipBoardService);
+                    }
+                    getContext().stopService(clipBoardService);
+
                     wodReceiver stopWOD = new wodReceiver();
                     stopWOD.cancelAlarm(getContext());
                     NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -223,6 +239,7 @@ public class settings extends Fragment {
                     startService.setBackgroundColor(Color.GREEN);
                     Log.d("F1nd_Settings ","Service stopped");
                 }
+                getActivity().finish();
 
             }
         });
