@@ -94,6 +94,7 @@ public class bgService extends Service {
                     .setSmallIcon(R.drawable.heart_on)
                     .setOngoing(true);
 
+
             Notification notification = builder.build();
 
             startForeground(1, notification);

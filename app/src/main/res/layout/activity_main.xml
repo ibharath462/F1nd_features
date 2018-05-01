@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
 
@@ -44,16 +44,6 @@
 
     </android.widget.LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/mainFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:alpha="1"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="80dp"
-        app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+
 
 </RelativeLayout>

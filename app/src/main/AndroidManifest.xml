@@ -37,7 +37,7 @@
 
         <activity
             android:name=".popupMeaning"
-            android:theme="@android:style/Theme.Dialog">
+            android:theme="@style/ThemeWithCorners">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
 

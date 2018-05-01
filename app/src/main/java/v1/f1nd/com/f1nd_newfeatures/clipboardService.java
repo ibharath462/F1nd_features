@@ -68,12 +68,12 @@ public class clipboardService extends Service {
                         int copiedWordLength = copiedWord.split(" " ).length;
 
                         if(copiedWordLength > 1){
-                            Toast.makeText(getApplicationContext(),"Parser needed",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),"Parser needed",Toast.LENGTH_SHORT).show();
                             prefs.edit().putString("meaningSearchWord", "" + copiedWord).commit();
                             Intent popupMeaning = new Intent(clipboardService.this, v1.f1nd.com.f1nd_newfeatures.parserActivity.class);
                             startActivity(popupMeaning);
                         }else{
-                            Toast.makeText(getApplicationContext(),"NO parser is needed",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),"NO parser is needed",Toast.LENGTH_SHORT).show();
                             prefs.edit().putString("meaningSearchWord", "" + copiedWord).commit();
                             Intent popupMeaning = new Intent(clipboardService.this, v1.f1nd.com.f1nd_newfeatures.popupMeaning.class);
                             startActivity(popupMeaning);
@@ -113,6 +113,8 @@ public class clipboardService extends Service {
                     .setOngoing(true)
                     .build();
 
+
+            
 
             startForeground(2, notification);
 

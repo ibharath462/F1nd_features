@@ -58,8 +58,9 @@ public class popupMeaning extends Activity {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         wlp.height = 1300;
         wlp.width = 900;
+
         getWindow().setAttributes(wlp);
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(255,148,0,211)));
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(255,63,81,181)));
 
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
@@ -70,12 +71,13 @@ public class popupMeaning extends Activity {
         }else{
             sword = prefs.getString("meaningSearchWord","ROFL");
         }
-        Toast.makeText(getApplicationContext(),"" + sword,Toast.LENGTH_SHORT).show();
 
         dbHandler = new databaseHandler(getApplicationContext());
 
-//        Long id = Long.parseLong(prefs.getString("id","1").toString());
-//        dbHandler.addHistory(id);
+        Long id = dbHandler.getIdForWord(sword);
+        dbHandler.addHistory(id);
+
+        //Toast.makeText(getApplicationContext(),"" + sword + " " + id,Toast.LENGTH_SHORT).show();
 
         //Setting the word & meaning...
         word = (AutoCompleteTextView) findViewById(R.id.word);
@@ -127,6 +129,11 @@ public class popupMeaning extends Activity {
         JSONArray resM = dbHandler.getMeaning(sword);
         meaningAL = new ArrayList<>();
 
+        if(resM.length() == 0){
+            Toast.makeText(getApplicationContext(),  "No matches found for the word, please try changing the tense / word",Toast.LENGTH_SHORT).show();
+            //finish();
+        }
+
         try {
             for(int i=0; i<resM.length(); i++){
                 JSONObject tWord = resM.getJSONObject(i);
@@ -144,7 +151,7 @@ public class popupMeaning extends Activity {
             e.printStackTrace();
         }
 
-        Log.d("F1nd_Meaning adapter" , "" + meaningAL.size());
+        Log.d("F1nd_Popup_Meaning" , "" + meaningAL.size());
 
         adapter = new meaningAdapter(getApplicationContext(), 0, meaningAL);
         meaning_listView.setAdapter(adapter);

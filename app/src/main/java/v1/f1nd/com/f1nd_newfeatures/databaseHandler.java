@@ -286,4 +286,21 @@ public class databaseHandler extends SQLiteOpenHelper {
         return resultArray;
 
     }
+
+    public long getIdForWord(String word){
+        long id = 462;
+        Log.d("F1nd_DB: ", "Inside  getIdForWord" + word);
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        Log.d("F1nd_DB: ", "path " + myPath);
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        String selectQuery = "SELECT  dict.id,dict.word from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "%' limit 1;";
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)));
+        }
+        database.close();
+        Log.d("F1nd_DB: ", "result array of search word " + id);
+        return id;
+    }
 }
