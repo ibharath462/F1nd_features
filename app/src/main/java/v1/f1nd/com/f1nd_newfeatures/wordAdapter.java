@@ -138,6 +138,7 @@ public class wordAdapter extends ArrayAdapter{
                             dbHandler.removeWOD(w.getId());
                             Toast.makeText(getContext(),"Removed " + w.getWord() + " from WOD :-(",Toast.LENGTH_SHORT).show();
                         }
+
                         notifyDataSetChanged();
                     }else{
                         Toast.makeText(getContext(),"Delete is not enabled here :-)",Toast.LENGTH_SHORT).show();

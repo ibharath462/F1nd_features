@@ -21,4 +21,9 @@
         android:icon="@android:drawable/ic_menu_manage"
         android:title="@string/title_settings" />
 
+    <item
+        android:id="@+id/navigation_help"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/title_help" />
+
 </menu>

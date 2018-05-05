@@ -114,7 +114,7 @@ public class clipboardService extends Service {
                     .build();
 
 
-            
+
 
             startForeground(2, notification);
 

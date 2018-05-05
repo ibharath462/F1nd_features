@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -90,6 +91,13 @@ public class MainActivity extends AppCompatActivity{
                     ft.commit();
                     //Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
                     return true;
+                case R.id.navigation_help:
+//                    ft = getSupportFragmentManager().beginTransaction();
+//                    currentFragment = new settings();
+//                    ft.replace(R.id.content, currentFragment);
+//                    ft.commit();
+                    Toast.makeText(getApplicationContext(),"Help",Toast.LENGTH_SHORT).show();
+                    return true;
             }
             return false;
         }
@@ -102,6 +110,9 @@ public class MainActivity extends AppCompatActivity{
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         res = getResources();
 

@@ -13,6 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by bharath on 29/3/18.
  */
@@ -82,6 +85,7 @@ public class databaseHandler extends SQLiteOpenHelper {
 
     public JSONArray searchWord(String q) {
         JSONArray resultArray = new JSONArray();
+        List<String> addedWords = new ArrayList<>();
         Log.d("F1nd_DB: ", "Inside searchTerm " + q);
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
@@ -93,12 +97,15 @@ public class databaseHandler extends SQLiteOpenHelper {
             do {
                 JSONObject tWord = new JSONObject();
                 try {
-                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
-                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                    if(!addedWords.contains(cursor.getString(cursor.getColumnIndex(WORD)))){
+                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                        if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                            tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                        }
+                        addedWords.add(cursor.getString(cursor.getColumnIndex(WORD)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

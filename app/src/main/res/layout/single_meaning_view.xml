@@ -9,7 +9,7 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+        android:id="@+id/shareCardView"
         app:cardUseCompatPadding="true"
         android:elevation="8dp"
         card_view:cardElevation="8dp"
@@ -41,35 +41,45 @@
                 android:layout_height="match_parent">
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="adv."
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:layout_gravity="left"
+                        android:textStyle="italic"
+                        android:id="@+id/wordtype"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="adv."
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="italic"
-                    android:id="@+id/wordtype"/>
 
-
-
-
-
-                <EditText
-                    android:id="@+id/meaning"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:gravity="left"
-                    android:text=""
-                    android:background="@android:color/transparent"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp" />
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:foregroundGravity="right"
+                        android:visibility="visible"
+                        android:id="@+id/share"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/share" />
 
 
 
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/meaning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text=""
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
 
         <LinearLayout
             android:padding="10dp"
@@ -78,10 +88,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_gravity="right"
+                android:id="@+id/tips"
+                android:text="F1nd"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="32sp"
+                />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+
+
+
 
             <com.like.LikeButton
                 app:icon_type="heart"
@@ -90,6 +115,7 @@
                 android:id="@+id/favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
 
 
         </LinearLayout>
