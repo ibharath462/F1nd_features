@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/parserLL"
         android:orientation="vertical"
         android:weightSum="10">
 
@@ -53,8 +54,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:foregroundGravity="center"
-                app:backgroundTint="@android:color/holo_red_light"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                app:backgroundTint="@android:color/holo_green_light"
+                app:srcCompat="@drawable/ic_share_black_18dp" />
 
             <View
                 android:layout_width="0dp"

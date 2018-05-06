@@ -152,21 +152,14 @@ public class wod extends Fragment {
                 }
             }
 
-            adapter = new wordAdapter(getContext(), 0, words);
-            wod_listView.setAdapter(adapter);
 
         }else{
             Toast.makeText(getContext(),"No words in Learn A Word :-(",Toast.LENGTH_SHORT).show();
-            BottomNavigationView navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
-            View v = navigation.findViewById(R.id.navigation_home);
-            v.performClick();
-
-            ft = getFragmentManager().beginTransaction();
-            currentFragment = new home();
-            ft.replace(R.id.content, currentFragment);
-            ft.commit();
+            words.add(new Word(1647431,"Brb","iS","Be Right Back",false,false,0));
         }
 
+        adapter = new wordAdapter(getContext(), 0, words);
+        wod_listView.setAdapter(adapter);
 
     }
 }

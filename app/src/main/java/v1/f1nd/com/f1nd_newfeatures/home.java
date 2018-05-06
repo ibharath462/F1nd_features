@@ -179,6 +179,7 @@ public class home extends Fragment {
                 }
             }
         }else{
+            words.add(new Word(1647431,"Brb","iS","Be Right Back",false,false,0));
             Toast.makeText(getContext(),"Your history is CLEAR :p",Toast.LENGTH_SHORT).show();
         }
 
