@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class favorites extends Fragment {
     View swipeView = null;
 
     private OnFragmentInteractionListener mListener;
+    Fragment currentFragment = null;
+    android.support.v4.app.FragmentTransaction ft;
 
     public favorites() {
         // Required empty public constructor
@@ -147,22 +150,33 @@ public class favorites extends Fragment {
         Log.d("F1nd_MainActivity","Adapter count.." + favoriteArray.length() + "\n");
         words = new ArrayList<>();
 
-        for(int i=0; i<favoriteArray.length();i++){
-            try {
-                JSONObject tWord = favoriteArray.getJSONObject(i);
-                Log.d("F1nd_FAV_Fragment ","parsed " + tWord.toString() + "\n");
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),true,false,2));
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(favoriteArray.length() > 0){
+
+            for(int i=0; i<favoriteArray.length();i++){
+                try {
+                    JSONObject tWord = favoriteArray.getJSONObject(i);
+                    Log.d("F1nd_FAV_Fragment ","parsed " + tWord.toString() + "\n");
+                    words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),true,false,2));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+
+            adapter = new wordAdapter(getContext(), 0, words);
+            favorite_listView.setAdapter(adapter);
+
+        }else{
+            Toast.makeText(getContext(),"No words added as favorites",Toast.LENGTH_SHORT).show();
+            BottomNavigationView navigation;
+            navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
+            View v = navigation.findViewById(R.id.navigation_home);
+            v.performClick();
+
+            ft = getFragmentManager().beginTransaction();
+            currentFragment = new home();
+            ft.replace(R.id.content, currentFragment);
+            ft.commit();
         }
-
-        adapter = new wordAdapter(getContext(), 0, words);
-        favorite_listView.setAdapter(adapter);
-
-
-
-
 
 
     }

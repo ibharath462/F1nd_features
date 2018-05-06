@@ -222,6 +222,7 @@ public class settings extends Fragment {
                     startService.setBackgroundColor(Color.RED);
                     isServiceRuning = true;
                     Log.d("F1nd_Settings ","Started service");
+                    getActivity().finish();
                 }else{
                     getContext().stopService(service);
 
@@ -239,7 +240,6 @@ public class settings extends Fragment {
                     startService.setBackgroundColor(Color.GREEN);
                     Log.d("F1nd_Settings ","Service stopped");
                 }
-                getActivity().finish();
 
             }
         });

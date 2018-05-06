@@ -65,7 +65,7 @@
                         android:id="@+id/share"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/share" />
+                        android:src="@drawable/ic_share_black_24dp" />
 
 
 
@@ -74,6 +74,8 @@
             <EditText
                 android:id="@+id/meaning"
                 android:layout_width="match_parent"
+                android:editable="false"
+                android:textIsSelectable="true"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text=""

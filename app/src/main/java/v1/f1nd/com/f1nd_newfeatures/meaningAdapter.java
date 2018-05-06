@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
@@ -53,6 +54,9 @@ public class meaningAdapter extends ArrayAdapter{
 
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.single_meaning_view, null);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         dbHandler = new databaseHandler(getContext());
 

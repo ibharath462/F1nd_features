@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
+    android:background="#efebe9"
     android:layout_height="match_parent">
 
 
@@ -36,7 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?android:attr/windowBackground"
+            app:elevation="8dp"
+            app:itemIconTint="@drawable/bnv_selector"
+            app:itemTextColor="@drawable/bnv_selector"
+            android:background="#795548"
             app:menu="@menu/navigation" />
 
     </LinearLayout>

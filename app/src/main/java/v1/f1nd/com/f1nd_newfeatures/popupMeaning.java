@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -53,14 +54,13 @@ public class popupMeaning extends Activity {
         setContentView(R.layout.fragment_meaning);
 
         WindowManager.LayoutParams wlp = getWindow().getAttributes();
-        wlp.dimAmount = 0;
         wlp.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         wlp.height = 1300;
         wlp.width = 900;
 
         getWindow().setAttributes(wlp);
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(255,63,81,181)));
+        getWindow().setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.rounded_corners));
 
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);

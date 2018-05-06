@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +43,9 @@ public class wod extends Fragment {
     ArrayAdapter<Word> adapter=null;
     ArrayList<Word> words;
     ListView wod_listView;
+
+    Fragment currentFragment = null;
+    android.support.v4.app.FragmentTransaction ft;
 
     private OnFragmentInteractionListener mListener;
 
@@ -131,22 +136,37 @@ public class wod extends Fragment {
         Log.d("F1nd_MainActivity","Adapter count.." + favoriteArray.length() + "\n");
         words = new ArrayList<>();
 
-        for(int i=0; i<favoriteArray.length();i++){
-            try {
-                JSONObject tWord = favoriteArray.getJSONObject(i);
-                Log.d("F1nd_WOD_Fragment ","parsed " + tWord.toString() + "\n");
-                boolean isLiked = false;
-                if(tWord.has("fid")){
-                    isLiked = true;
+        if(favoriteArray.length() > 0){
+
+            for(int i=0; i<favoriteArray.length();i++){
+                try {
+                    JSONObject tWord = favoriteArray.getJSONObject(i);
+                    Log.d("F1nd_WOD_Fragment ","parsed " + tWord.toString() + "\n");
+                    boolean isLiked = false;
+                    if(tWord.has("fid")){
+                        isLiked = true;
+                    }
+                    words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,3));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,3));
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
+            adapter = new wordAdapter(getContext(), 0, words);
+            wod_listView.setAdapter(adapter);
+
+        }else{
+            Toast.makeText(getContext(),"No words in Learn A Word :-(",Toast.LENGTH_SHORT).show();
+            BottomNavigationView navigation = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
+            View v = navigation.findViewById(R.id.navigation_home);
+            v.performClick();
+
+            ft = getFragmentManager().beginTransaction();
+            currentFragment = new home();
+            ft.replace(R.id.content, currentFragment);
+            ft.commit();
         }
 
-        adapter = new wordAdapter(getContext(), 0, words);
-        wod_listView.setAdapter(adapter);
 
     }
 }

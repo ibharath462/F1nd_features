@@ -54,7 +54,7 @@ public class home extends Fragment {
     EditText searchText;
     JSONArray searchArray;
     ListView search_listView;
-    TextView wodWord,wodWordType;
+    //TextView wodWord,wodWordType;
     static Resources res;
     SharedPreferences prefs = null;
 
@@ -147,8 +147,8 @@ public class home extends Fragment {
         dbHandler = new databaseHandler(getContext());
         search_listView = (ListView)getView().findViewById(R.id.search_listView);
         searchText = (EditText) getView().findViewById(R.id.searchText);
-        wodWord = (TextView)getView().findViewById(R.id.WODword);
-        wodWordType = (TextView)getView().findViewById(R.id.WODwordtype);
+//        wodWord = (TextView)getView().findViewById(R.id.WODword);
+//        wodWordType = (TextView)getView().findViewById(R.id.WODwordtype);
         searchArray = new JSONArray();
         searchArray = dbHandler.getHistory();
         Log.d("F1nd_MainActivity","Adapter count.." + searchArray.length() + "\n");
@@ -157,25 +157,29 @@ public class home extends Fragment {
         res = getResources();
         prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
         if(prefs.getBoolean("firstrun", true)){
-            wodWord.setText("Brb");
-            wodWordType.setText("is");
+//            wodWord.setText("Brb");
+//            wodWordType.setText("is");
         }else{
-            wodWord.setText("" + prefs.getString("wodWord","Brb").toString());
-            wodWordType.setText("" + prefs.getString("wodWordType","is").toString());
+//            wodWord.setText("" + prefs.getString("wodWord","Brb").toString());
+//            wodWordType.setText("" + prefs.getString("wodWordType","is").toString());
         }
 
-        for(int i=0; i<searchArray.length();i++){
-            try {
-                JSONObject tWord = searchArray.getJSONObject(i);
-                Log.d("F1nd_MainActivity","parsed " + tWord.toString() + "\n");
-                boolean isLiked = false;
-                if(tWord.has("fid")){
-                    isLiked = true;
+        if(searchArray.length() > 0){
+            for(int i=0; i<searchArray.length();i++){
+                try {
+                    JSONObject tWord = searchArray.getJSONObject(i);
+                    Log.d("F1nd_MainActivity","parsed " + tWord.toString() + "\n");
+                    boolean isLiked = false;
+                    if(tWord.has("fid")){
+                        isLiked = true;
+                    }
+                    words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,0));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,true,0));
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        }else{
+            Toast.makeText(getContext(),"Your history is CLEAR :p",Toast.LENGTH_SHORT).show();
         }
 
         searchText.addTextChangedListener(new TextWatcher() {
@@ -199,6 +203,7 @@ public class home extends Fragment {
 
         adapter = new wordAdapter(getContext(), 0, words);
         search_listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void searchAndAssign(String searchTerm){

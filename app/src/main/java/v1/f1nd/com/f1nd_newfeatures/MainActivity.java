@@ -29,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +55,9 @@ public class MainActivity extends AppCompatActivity{
     android.support.v4.app.FragmentTransaction ft;
     static Resources res;
     SharedPreferences prefs = null;
+    BottomNavigationView navigation;
     static String dbPath,dbName;
+    int exitCount = 0;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -62,41 +65,46 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            //Toast.makeText(getApplicationContext(),"" + getSupportFragmentManager().getBackStackEntryCount(),Toast.LENGTH_SHORT).show();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_SHORT).show();
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new home();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.content, currentFragment,"home").addToBackStack("home");
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
+                    exitCount = 0;
                     return true;
                 case R.id.navigation_favorites:
-                    //Toast.makeText(getApplicationContext(),"Favorites",Toast.LENGTH_SHORT).show();
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new favorites();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.content, currentFragment,"favorites").addToBackStack("favorites");
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
+                    exitCount = 0;
                     return true;
                 case R.id.navigation_wod:
-                    //Toast.makeText(getApplicationContext(),"WOD",Toast.LENGTH_SHORT).show();
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new wod();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.content, currentFragment,"wod").addToBackStack("wod");
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
+                    exitCount = 0;
                     return true;
                 case R.id.navigation_settings:
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new settings();
-                    ft.replace(R.id.content, currentFragment);
+                    ft.replace(R.id.content, currentFragment,"settings").addToBackStack("settings");
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
-                    //Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                    exitCount = 0;
                     return true;
                 case R.id.navigation_help:
 //                    ft = getSupportFragmentManager().beginTransaction();
 //                    currentFragment = new settings();
 //                    ft.replace(R.id.content, currentFragment);
 //                    ft.commit();
-                    Toast.makeText(getApplicationContext(),"Help",Toast.LENGTH_SHORT).show();
+                    exitCount = 0;
                     return true;
             }
             return false;
@@ -106,13 +114,12 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
 
         res = getResources();
 
@@ -126,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
             String processedText = receivedProcessText.toString();
             ft = getSupportFragmentManager().beginTransaction();
             currentFragment = new meaning();
-            ft.replace(R.id.content, currentFragment);
+            ft.replace(R.id.content, currentFragment,"home").addToBackStack("home");
             ft.commit();
 
         }else{
@@ -146,7 +153,7 @@ public class MainActivity extends AppCompatActivity{
                 setActionBar("F1nd");
                 ft = getSupportFragmentManager().beginTransaction();
                 currentFragment = new home();
-                ft.replace(R.id.content, currentFragment);
+                ft.replace(R.id.content, currentFragment,"home").addToBackStack("home");
                 ft.commit();
             }
 
@@ -168,7 +175,8 @@ public class MainActivity extends AppCompatActivity{
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setTitle(heading);
-        actionBar.show();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6d4c41")));
+        actionBar.hide();
 
     }
 
@@ -230,6 +238,18 @@ public class MainActivity extends AppCompatActivity{
             }
 
 
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        exitCount++;
+        if(exitCount == 1){
+            Toast.makeText(getApplicationContext(), "Press back once again to exit", Toast.LENGTH_SHORT).show();
+        }else{
+            finish();
         }
 
     }
