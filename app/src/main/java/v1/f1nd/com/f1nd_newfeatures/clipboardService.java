@@ -79,7 +79,7 @@ public class clipboardService extends Service {
                             startActivity(popupMeaning);
                         }
 
-                        Log.d("F1nd_clipboardService", copiedWord);
+                        Log.d("F1nd_clipboardService", copiedWord );
                     }
                 }
             };

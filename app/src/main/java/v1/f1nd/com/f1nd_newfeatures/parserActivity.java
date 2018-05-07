@@ -14,6 +14,7 @@ import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,8 +78,16 @@ public class parserActivity extends Activity {
         wlp.dimAmount = 0;
         wlp.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
-        wlp.height = 1300;
-        wlp.width = 900;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+
+        wlp.height = (height) / 2;
+        wlp.width = (3 * width) / 4;
+
         getWindow().setAttributes(wlp);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.argb(0,0,0,0)));
 
@@ -123,7 +132,7 @@ public class parserActivity extends Activity {
         arr = copiedSentence.split(" ");
 
         if(sentenceLength > 8){
-            Log.d("F1nd_parserActivity", "VISIBLEEEE" + sentenceLength);
+            Log.d("F1nd_parserActivity", "VISIBLEEEE " + sentenceLength);
             next.setVisibility(View.VISIBLE);
             prev.setVisibility(View.VISIBLE);
         }else{
@@ -227,12 +236,16 @@ public class parserActivity extends Activity {
                 if(tCounter == 8 && (tCounter + 8 >= sentenceLength)){
                     //Do as such...
                 }else if(tCounter == 8 && (tCounter + 8 < sentenceLength)){
-                    tCounter = sentenceLength - (sentenceLength % 8);
+                    if(sentenceLength % 8 == 0){
+                        tCounter = sentenceLength - 8;
+                    }else{
+                        tCounter = sentenceLength - (sentenceLength % 8);
+                    }
                 }else if(tCounter == sentenceLength){
                     if(tCounter % 8 != 0){
                         tCounter = tCounter - (tCounter % 8) - 8;
                     }else{
-                        tCounter = 0;
+                        tCounter -= 16;
                     }
                 }else{
                     tCounter -= 16;

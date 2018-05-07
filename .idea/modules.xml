@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/F1nd_Mac.iml" filepath="$PROJECT_DIR$/F1nd_Mac.iml" />
       <module fileurl="file://$PROJECT_DIR$/F1nd_newFeatures.iml" filepath="$PROJECT_DIR$/F1nd_newFeatures.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

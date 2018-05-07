@@ -27,6 +27,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -166,6 +167,29 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.about) {
+            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void setActionBar(String heading) {
         // TODO Auto-generated method stub
@@ -173,10 +197,11 @@ public class MainActivity extends AppCompatActivity{
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
+
         actionBar.setTitle(heading);
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6d4c41")));
-        actionBar.hide();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4e342e")));
+        actionBar.show();
 
     }
 
@@ -219,6 +244,8 @@ public class MainActivity extends AppCompatActivity{
         myOutput.close();
         myInput.close();
     }
+
+
 
 
     public void getPermissions(){
