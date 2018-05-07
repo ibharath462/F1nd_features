@@ -3,6 +3,7 @@ package v1.f1nd.com.f1nd_newfeatures;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -101,10 +102,10 @@ public class MainActivity extends AppCompatActivity{
                     exitCount = 0;
                     return true;
                 case R.id.navigation_help:
-//                    ft = getSupportFragmentManager().beginTransaction();
-//                    currentFragment = new settings();
-//                    ft.replace(R.id.content, currentFragment);
-//                    ft.commit();
+                    Intent i = new Intent(MainActivity.this,onBoarding.class);
+                    i.putExtra("isFromMA",true);
+                    startActivity(i);
+                    finish();
                     exitCount = 0;
                     return true;
             }
@@ -183,7 +184,17 @@ public class MainActivity extends AppCompatActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about) {
-            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Light_Dialog);
+            } else {
+                builder = new AlertDialog.Builder(MainActivity.this);
+            }
+
+
+            builder.setTitle("Developer")
+                    .setMessage("Bharath Asokan\nibharath462@gmail.com\ngithub.com/RobertSpartacus")
+                    .show();
             return true;
         }
 

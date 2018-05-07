@@ -147,7 +147,7 @@ public class settings extends Fragment {
         eLaW = (Switch)getView().findViewById(R.id.eLaW);
 
 
-        isServiceRuning = isMyServiceRunning(bgService.class);
+        isServiceRuning = isMyServiceRunning(bgService.class) || isMyServiceRunning(clipboardService.class);
         ;
         res = getResources();
         prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
@@ -206,23 +206,41 @@ public class settings extends Fragment {
                     }else{
                         prefs.edit().putString("wodInterval", "" + 15).commit();
                     }
+                    boolean finishFlag = true;
+                    boolean noneFlag = true;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        getContext().startForegroundService(service);
+                        if(prefs.getBoolean("isLaWEnabled",false)){
+                            getContext().startForegroundService(service);
+                            noneFlag = false;
+                        }
                         if(prefs.getBoolean("isCopyListener",false)){
                             getContext().startForegroundService(clipBoardService);
+                            finishFlag = false;
+                            noneFlag = false;
                         }
 
                     } else {
-                        getContext().startService(service);
+                        if(prefs.getBoolean("isLaWEnabled",false)){
+                            getContext().startService(service);
+                            noneFlag = false;
+                        }
                         if(prefs.getBoolean("isCopyListener",false)){
                             getContext().startService(clipBoardService);
+                            finishFlag = false;
+                            noneFlag = false;
                         }
                     }
-                    startService.setText("Stop Service");
-                    startService.setBackgroundColor(Color.RED);
-                    isServiceRuning = true;
-                    Log.d("F1nd_Settings ","Started service");
-                    getActivity().finish();
+                    if(!noneFlag){
+                        startService.setText("Stop Service");
+                        startService.setBackgroundColor(Color.RED);
+                        isServiceRuning = true;
+                        Log.d("F1nd_Settings ","Started service");
+                    }else{
+                        Toast.makeText(getContext(),"Enable any one service...",Toast.LENGTH_SHORT).show();
+                    }
+                    if(!finishFlag){
+                        getActivity().finish();
+                    }
                 }else{
                     getContext().stopService(service);
 

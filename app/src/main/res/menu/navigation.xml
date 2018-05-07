@@ -14,7 +14,7 @@
     <item
         android:id="@+id/navigation_wod"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_wod" />
+        android:title="LaW" />
 
     <item
         android:id="@+id/navigation_settings"
