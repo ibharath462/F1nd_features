@@ -59,11 +59,11 @@ public class clipboardService extends Service {
                         ClipData clipData = clipBoard.getPrimaryClip();
 
                         String copiedWord = clipData.getItemAt(0).coerceToText(getApplicationContext()).toString();
-                        copiedWord = copiedWord.trim();
                         copiedWord = copiedWord.replaceAll("\\d","");
                         copiedWord = copiedWord.replaceAll("[^a-zA-Z]"," ");
                         copiedWord = copiedWord.replaceAll("^ +| +$|( )+", " ");
                         copiedWord = copiedWord.replace("\n", "").replace("\r", "");
+                        copiedWord = copiedWord.trim();
 
                         int copiedWordLength = copiedWord.split(" " ).length;
 

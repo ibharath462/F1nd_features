@@ -1,16 +1,21 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,6 +26,8 @@ import android.widget.Toast;
 
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,7 +73,7 @@ public class meaningAdapter extends ArrayAdapter{
 
 
 
-        final EditText meaning=(EditText)view.findViewById(R.id.meaning);
+        final TextView meaning=(TextView) view.findViewById(R.id.meaning);
         TextView wordType = (TextView)view.findViewById(R.id.wordtype);
         final TextView tips = (TextView)view.findViewById(R.id.tips);
         final LikeButton favorite= (LikeButton)view.findViewById(R.id.favorite);
@@ -108,6 +115,33 @@ public class meaningAdapter extends ArrayAdapter{
                     e.printStackTrace();
                 }
 
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
+                } else {
+                    builder = new AlertDialog.Builder(getContext());
+                }
+
+                if(builder != null){
+                    String example = dbHandler.getExample(m.getWord());
+                    if(!example.equals("")){
+                        builder.setTitle("" + m.getWord())
+                                .setMessage("" + example)
+                                .show();
+                    }else {
+                        Toast.makeText(getContext(),"Examples not available...",Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(),"Examples not shown here...",Toast.LENGTH_SHORT).show();
+                }
+
+                return false;
             }
         });
 

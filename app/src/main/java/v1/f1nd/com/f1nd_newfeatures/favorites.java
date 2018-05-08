@@ -165,7 +165,7 @@ public class favorites extends Fragment {
 
         }else{
             Toast.makeText(getContext(),"No words added as favorites",Toast.LENGTH_SHORT).show();
-            words.add(new Word(1647431,"Brb","iS","Be Right Back",false,false,0));
+            words.add(new Word(242518,"Brb","iS","Be Right Back",false,false,0));
         }
 
         adapter = new wordAdapter(getContext(), 0, words);

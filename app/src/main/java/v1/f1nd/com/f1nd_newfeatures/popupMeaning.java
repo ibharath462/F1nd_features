@@ -69,6 +69,8 @@ public class popupMeaning extends Activity {
         wlp.height = (height) / 2;
         wlp.width = (3 * width) / 4 ;
 
+
+
         getWindow().setAttributes(wlp);
         getWindow().setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.rounded_corners));
 
@@ -93,10 +95,18 @@ public class popupMeaning extends Activity {
         word = (AutoCompleteTextView) findViewById(R.id.word);
         meaning_listView = (ListView)findViewById(R.id.meaning_listView);
 
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         word.setEnabled(true);
         word.setTextIsSelectable(true);
         word.setText(sword);
+
+        word.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imm.showSoftInput(word, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
 
         word.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,6 +129,7 @@ public class popupMeaning extends Activity {
             public void afterTextChanged(Editable editable) {
 
                 if(!sword.equals(word)){
+                    //imm.hideSoftInputFromWindow(word.getWindowToken(), 0);
                     sword = word.getText().toString();
                     setContent();
                 }
