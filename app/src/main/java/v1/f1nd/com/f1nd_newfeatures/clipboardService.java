@@ -107,7 +107,7 @@ public class clipboardService extends Service {
             Notification notification = new Notification.Builder(getApplicationContext())
                     .setContentTitle("F1nd")
                     .setContentText("F1nd is listening to your clipboard")
-                    .setSmallIcon(R.drawable.heart_on)
+                    .setSmallIcon(R.drawable.ic_content_copy_black_24dp)
                     .setChannelId(CHANNEL_ID)
                     .setStyle(style)
                     .setOngoing(true)
@@ -123,7 +123,7 @@ public class clipboardService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentTitle("F1nd")
                     .setContentText("F1nd is listening to your clipboard")
-                    .setSmallIcon(R.drawable.heart_on)
+                    .setSmallIcon(R.drawable.ic_content_copy_black_24dp)
                     .setOngoing(true);
 
             Notification notification = builder.build();

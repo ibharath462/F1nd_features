@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -67,17 +69,18 @@ public class bgService extends Service {
     }
 
     public void createNotification(){
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             String CHANNEL_ID = "my_channel_01";// The id of the channel.
             CharSequence name = "WOD";// The user-visible name of the channel.
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            Notification.Style style = new Notification.BigTextStyle().bigText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning");
+            Notification.Style style = new Notification.BigTextStyle().bigText("You will get new word notifications at your specified time interval");
             Notification notification = new Notification.Builder(getApplicationContext())
                     .setContentTitle("F1nd")
-                    .setContentText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning")
-                    .setSmallIcon(R.drawable.heart_on)
+                    .setContentText("You will get new word notifications at your specified time interval")
+                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                     .setChannelId(CHANNEL_ID)
                     .setStyle(style)
                     .setOngoing(true)
@@ -90,8 +93,8 @@ public class bgService extends Service {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentTitle("F1nd")
-                    .setContentText("Copy a word to get the meaning / copy a sentence to pie parse and get the meaning")
-                    .setSmallIcon(R.drawable.heart_on)
+                    .setContentText("You will get new word notifications at your specified time interval")
+                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                     .setOngoing(true);
 
 

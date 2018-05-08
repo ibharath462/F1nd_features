@@ -73,7 +73,7 @@ public class wodReceiver extends BroadcastReceiver {
                 Notification notification = new Notification.Builder(context)
                         .setContentTitle("" + word)
                         .setContentText("" + meaning)
-                        .setSmallIcon(R.drawable.heart_on)
+                        .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                         .setChannelId(CHANNEL_ID)
                         .setStyle(style)
                         .setOngoing(true)
@@ -87,8 +87,9 @@ public class wodReceiver extends BroadcastReceiver {
             } else {
 
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                        .setContentTitle("WOD_check")
-                        .setContentText("Hello WOD")
+                        .setContentTitle("" + word)
+                        .setContentText("" + meaning)
+                        .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true);
 
