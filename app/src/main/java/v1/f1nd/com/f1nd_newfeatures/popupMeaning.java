@@ -19,6 +19,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -90,6 +92,7 @@ public class popupMeaning extends Activity {
         //Setting the word & meaning...
         word = (AutoCompleteTextView) findViewById(R.id.word);
         meaning_listView = (ListView)findViewById(R.id.meaning_listView);
+
 
         word.setEnabled(true);
         word.setTextIsSelectable(true);

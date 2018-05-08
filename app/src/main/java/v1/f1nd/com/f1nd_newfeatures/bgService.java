@@ -91,14 +91,15 @@ public class bgService extends Service {
 
         } else {
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+            Notification.Style style = new Notification.BigTextStyle().bigText("You will get new word notifications at your specified time interval");
+            Notification notification = new Notification.Builder(getApplicationContext())
                     .setContentTitle("F1nd")
                     .setContentText("You will get new word notifications at your specified time interval")
                     .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                    .setOngoing(true);
+                    .setStyle(style)
+                    .setOngoing(true)
+                    .build();
 
-
-            Notification notification = builder.build();
 
             startForeground(1, notification);
         }

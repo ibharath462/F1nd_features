@@ -86,15 +86,20 @@ public class wodReceiver extends BroadcastReceiver {
 
             } else {
 
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                int notifyID = 1;
+                CharSequence name = "WOD";// The user-visible name of the channel.
+                Notification.Style style = new Notification.BigTextStyle().bigText(meaning);
+                Notification notification = new Notification.Builder(context)
                         .setContentTitle("" + word)
                         .setContentText("" + meaning)
                         .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setAutoCancel(true);
+                        .setStyle(style)
+                        .setOngoing(true)
+                        .build();
 
-                Notification notification = builder.build();
-                //notification.notify();
+                NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mNotificationManager.notify(notifyID,notification);
             }
 
         }

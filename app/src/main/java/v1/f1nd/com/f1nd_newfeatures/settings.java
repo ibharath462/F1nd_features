@@ -44,7 +44,7 @@ public class settings extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button startService,saveSettings;
+    Button startService;
     boolean isServiceRuning = false;
     EditText timeInterval;
 
@@ -138,7 +138,7 @@ public class settings extends Fragment {
 
         startService = (Button)getView().findViewById(R.id.startService);
 
-        saveSettings = (Button)getView().findViewById(R.id.saveSettings);
+        //saveSettings = (Button)getView().findViewById(R.id.saveSettings);
 
         timeInterval = (EditText)getView().findViewById(R.id.wodInterval);
 
@@ -170,14 +170,14 @@ public class settings extends Fragment {
             startService.setText("Start Service");
         }
 
-        saveSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("F1nd_Settings ","Settings saved");
-                Toast.makeText(getContext(),"Settings saved :-)",Toast.LENGTH_SHORT).show();
-                prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
-            }
-        });
+//        saveSettings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("F1nd_Settings ","Settings saved");
+//                Toast.makeText(getContext(),"Settings saved :-)",Toast.LENGTH_SHORT).show();
+//                prefs.edit().putString("wodInterval", "" + timeInterval.getText().toString()).commit();
+//            }
+//        });
 
         eCopy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -221,11 +221,11 @@ public class settings extends Fragment {
 
                     } else {
                         if(prefs.getBoolean("isLaWEnabled",false)){
-                            getContext().startService(service);
+                            getActivity().startService(new Intent(getActivity(),bgService.class));
                             noneFlag = false;
                         }
                         if(prefs.getBoolean("isCopyListener",false)){
-                            getContext().startService(clipBoardService);
+                            getActivity().startService(new Intent(getActivity(),clipboardService.class));
                             finishFlag = false;
                             noneFlag = false;
                         }
