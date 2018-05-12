@@ -3,6 +3,7 @@ package v1.f1nd.com.f1nd_newfeatures;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -115,7 +116,10 @@ public class clipboardService extends Service {
                     .setOngoing(true)
                     .build();
 
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(getApplicationContext(), MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
+            notification.contentIntent = contentIntent;
 
 
             startForeground(2, notification);
@@ -129,6 +133,11 @@ public class clipboardService extends Service {
                     .setOngoing(true);
 
             Notification notification = builder.build();
+
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(getApplicationContext(), MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notification.contentIntent = contentIntent;
 
             startForeground(2, notification);
         }

@@ -185,6 +185,7 @@ public class popupMeaning extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (MotionEvent.ACTION_OUTSIDE == event.getAction()) {
+            prefs.edit().putBoolean("toastExample", false).commit();
             finish();
             return true;
         }

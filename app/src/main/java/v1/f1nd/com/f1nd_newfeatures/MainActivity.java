@@ -48,6 +48,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.TopLeft;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity{
     BottomNavigationView navigation;
     static String dbPath,dbName;
     int exitCount = 0;
+    View favView;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -171,6 +176,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //favView = findViewById(R.id.navigation_favorites);
         getMenuInflater().inflate(R.menu.info, menu);
         return true;
     }

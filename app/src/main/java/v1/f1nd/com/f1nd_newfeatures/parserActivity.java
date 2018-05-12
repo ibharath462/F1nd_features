@@ -264,7 +264,7 @@ public class parserActivity extends Activity {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("image/*");
                 share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                share.putExtra(Intent.EXTRA_TEXT, "" + copiedSentence + ".\n\nI parsed this sentence and found meaning for a word!");
+                share.putExtra(Intent.EXTRA_TEXT, "" + copiedSentence + ".\n\nI parsed this sentence and found meaning for a word!, F1nd any meaning here\nhttp://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName());
                 LinearLayout parserLL = (LinearLayout)findViewById(R.id.parserLL);
                 closePie.setVisibility(View.INVISIBLE);
                 parserLL.setDrawingCacheEnabled(true);

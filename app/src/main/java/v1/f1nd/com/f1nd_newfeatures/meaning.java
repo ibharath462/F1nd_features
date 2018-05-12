@@ -23,6 +23,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,6 +136,20 @@ public class meaning extends Fragment {
 
         res = getContext().getResources();
         prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("meaningFirstRun", true)){
+
+            new ShowCaseView.Builder(getContext())
+                    .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.meaning_listView)))
+                    .withTypedRadius(new Radius(300F))
+                    .withContent("Long press on a meaning to get examples using the word, subject to availability :p")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("meaningFirstRun", false).commit();
+
+        }
+
+
         dbHandler = new databaseHandler(getContext());
 
         Long id = Long.parseLong(prefs.getString("id","1").toString());

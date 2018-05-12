@@ -1,8 +1,13 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +33,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
 
 
 /**
@@ -50,6 +58,8 @@ public class favorites extends Fragment {
     databaseHandler dbHandler;
     ArrayAdapter<Word> adapter=null;
     ArrayList<Word> words;
+    static Resources res;
+    SharedPreferences prefs = null;
     ListView favorite_listView;
 
     View swipeView = null;
@@ -135,11 +145,26 @@ public class favorites extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @SuppressLint("ResourceType")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("favFirstRun", true)){
+
+            new ShowCaseView.Builder(getContext())
+                    .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_favorites)))
+                    .withTypedRadius(new Radius(186F))
+                    .withContent("Click on heart icon anywhere to make list of your favorites.\nClick again on heart to remove from favorites.")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("favFirstRun", false).commit();
+
+        }
 
 
 

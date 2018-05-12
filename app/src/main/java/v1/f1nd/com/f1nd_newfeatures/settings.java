@@ -25,6 +25,10 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -136,6 +140,22 @@ public class settings extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("settingsFirstRun", true)){
+
+            new ShowCaseView.Builder(getContext())
+                    .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.startService)))
+                    .withTypedRadius(new Radius(186F))
+                    .withContent("Once you have choose F1nd services and set time interval, press here.")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("settingsFirstRun", false).commit();
+
+        }
+
+
         startService = (Button)getView().findViewById(R.id.startService);
 
         //saveSettings = (Button)getView().findViewById(R.id.saveSettings);
@@ -148,9 +168,7 @@ public class settings extends Fragment {
 
 
         isServiceRuning = isMyServiceRunning(bgService.class) || isMyServiceRunning(clipboardService.class);
-        ;
-        res = getResources();
-        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
 
         eCopy.setChecked(prefs.getBoolean("isCopyListener",false));
         eLaW.setChecked(prefs.getBoolean("isLaWEnabled",false));

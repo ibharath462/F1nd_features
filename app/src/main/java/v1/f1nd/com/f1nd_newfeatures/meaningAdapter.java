@@ -99,7 +99,7 @@ public class meaningAdapter extends ArrayAdapter{
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("image/*");
                 share.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                share.putExtra(Intent.EXTRA_TEXT, "F1nd the word for this meaning only on F1nd app ;-)");
+                share.putExtra(Intent.EXTRA_TEXT, "F1nd the word for this meaning on F1nd, \nhttp://play.google.com/store/apps/details?id=" + context.getPackageName());
                 cardView.setDrawingCacheEnabled(true);
                 tips.setVisibility(View.VISIBLE);
                 Bitmap bitmap = Bitmap.createBitmap(cardView.getDrawingCache());
@@ -142,7 +142,6 @@ public class meaningAdapter extends ArrayAdapter{
                 boolean toastOrPoup = prefs.getBoolean("toastExample",false);
                 if(toastOrPoup){
                     Toast.makeText(getContext(),"" + example,Toast.LENGTH_LONG).show();
-                    prefs.edit().putBoolean("toastExample", false).commit();
                 }else {
                     if(!example.equals("")){
                         builder.setTitle("" + m.getWord())

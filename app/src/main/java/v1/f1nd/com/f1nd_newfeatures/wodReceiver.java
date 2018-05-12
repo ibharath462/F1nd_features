@@ -79,6 +79,11 @@ public class wodReceiver extends BroadcastReceiver {
                         .setOngoing(true)
                         .build();
 
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notification.contentIntent = contentIntent;
+
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.createNotificationChannel(mChannel);
 
@@ -96,6 +101,11 @@ public class wodReceiver extends BroadcastReceiver {
                         .setStyle(style)
                         .setOngoing(true)
                         .build();
+
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                        new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notification.contentIntent = contentIntent;
 
                 NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

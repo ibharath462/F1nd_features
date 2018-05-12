@@ -29,6 +29,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,6 +148,23 @@ public class home extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("homeFirstRun", true)){
+
+            new ShowCaseView.Builder(getContext())
+                    .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_home)))
+                    .withTypedRadius(new Radius(300F))
+                    .withContent("Long press on any word to get quick meaning of the word")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("homeFirstRun", false).commit();
+
+        }
+
+
+
         dbHandler = new databaseHandler(getContext());
         search_listView = (ListView)getView().findViewById(R.id.search_listView);
         searchText = (EditText) getView().findViewById(R.id.searchText);
@@ -154,8 +175,6 @@ public class home extends Fragment {
         Log.d("F1nd_MainActivity","Adapter count.." + searchArray.length() + "\n");
         words = new ArrayList<>();
 
-        res = getResources();
-        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
         if(prefs.getBoolean("firstrun", true)){
 //            wodWord.setText("Brb");
 //            wodWordType.setText("is");

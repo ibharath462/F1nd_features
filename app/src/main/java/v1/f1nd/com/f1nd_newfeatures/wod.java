@@ -1,6 +1,8 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
 
 
 /**
@@ -43,6 +49,8 @@ public class wod extends Fragment {
     ArrayAdapter<Word> adapter=null;
     ArrayList<Word> words;
     ListView wod_listView;
+    static Resources res;
+    SharedPreferences prefs = null;
 
     Fragment currentFragment = null;
     android.support.v4.app.FragmentTransaction ft;
@@ -128,6 +136,22 @@ public class wod extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        res = getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("wodFirstRun", true)){
+
+            new ShowCaseView.Builder(getContext())
+                    .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_wod)))
+                    .withTypedRadius(new Radius(186F))
+                    .withContent("Incase if you miss out any word from Learn a Word, we have it here to make sure you learn :-)")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("wodFirstRun", false).commit();
+
+        }
+
 
         dbHandler = new databaseHandler(getContext());
         wod_listView = (ListView)getView().findViewById(R.id.wod_listView);
