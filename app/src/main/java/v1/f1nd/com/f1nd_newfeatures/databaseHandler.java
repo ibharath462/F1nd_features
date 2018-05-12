@@ -149,6 +149,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         if (!cursor.moveToFirst()) {
             ContentValues cv = new ContentValues();
             cv.put("id", id);
+            cv.put("time", System.currentTimeMillis());
             database.insert("history_mapping", null, cv);
             Log.d("F1nd_DB:", "History added succesfull " + id);
         }
@@ -160,7 +161,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         JSONArray resultArray = new JSONArray();
-        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join history_mapping on history_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where history_mapping.id = dict.id ;";
+        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join history_mapping on history_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where history_mapping.id = dict.id order by history_mapping.time desc;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -224,6 +225,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         //Adding details in the WOD table...
         ContentValues cv = new ContentValues();
         cv.put("id", wodId);
+        cv.put("time", System.currentTimeMillis());
         database.insert("wod_mapping", null, cv);
         Log.d("F1nd_DB:", "WOD added succesfull " + wodId);
         database.close();
@@ -238,7 +240,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join wod_mapping on wod_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where wod_mapping.id = dict.id ;";
+        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join wod_mapping on wod_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where wod_mapping.id = dict.id order by wod_mapping.time desc;";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {

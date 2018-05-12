@@ -1,9 +1,12 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -12,6 +15,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +50,8 @@ public class meaningAdapter extends ArrayAdapter{
     private List<meaningBean> menaingDetails;
     databaseHandler dbHandler;
     ImageButton shareButton;
+    static Resources res;
+    SharedPreferences prefs = null;
 
     public meaningAdapter(Context context, int resource,ArrayList<meaningBean> objects) {
         super(context, resource,objects);
@@ -70,6 +76,9 @@ public class meaningAdapter extends ArrayAdapter{
         final Date now = new Date();
         final CardView cardView = (CardView)view.findViewById(R.id.shareCardView);
         shareButton = (ImageButton)view.findViewById(R.id.share);
+
+        res = getContext().getResources();
+        prefs = getContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
 
 
 
@@ -121,15 +130,20 @@ public class meaningAdapter extends ArrayAdapter{
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
+
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog);
                 } else {
                     builder = new AlertDialog.Builder(getContext());
                 }
-
-                if(builder != null){
-                    String example = dbHandler.getExample(m.getWord());
+                String example = dbHandler.getExample(m.getWord());
+                boolean toastOrPoup = prefs.getBoolean("toastExample",false);
+                if(toastOrPoup){
+                    Toast.makeText(getContext(),"" + example,Toast.LENGTH_LONG).show();
+                    prefs.edit().putBoolean("toastExample", false).commit();
+                }else {
                     if(!example.equals("")){
                         builder.setTitle("" + m.getWord())
                                 .setMessage("" + example)
@@ -137,8 +151,6 @@ public class meaningAdapter extends ArrayAdapter{
                     }else {
                         Toast.makeText(getContext(),"Examples not available...",Toast.LENGTH_SHORT).show();
                     }
-                }else {
-                    Toast.makeText(getContext(),"Examples not shown here...",Toast.LENGTH_SHORT).show();
                 }
 
                 return false;

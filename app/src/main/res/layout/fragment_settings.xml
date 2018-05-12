@@ -79,7 +79,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:textAlignment="center"
-            android:maxLength="2"
+            android:maxLength="4"
             android:inputType="numberSigned" />
 
     </LinearLayout>

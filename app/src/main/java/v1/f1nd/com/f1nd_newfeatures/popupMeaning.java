@@ -83,6 +83,7 @@ public class popupMeaning extends Activity {
         }else{
             sword = prefs.getString("meaningSearchWord","ROFL");
         }
+        prefs.edit().putBoolean("toastExample", true).commit();
 
         dbHandler = new databaseHandler(getApplicationContext());
 
