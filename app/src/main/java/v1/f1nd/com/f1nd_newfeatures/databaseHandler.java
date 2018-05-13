@@ -320,7 +320,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT dict.usage from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "%';";
+        String selectQuery = "SELECT dict.usage from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "';";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {

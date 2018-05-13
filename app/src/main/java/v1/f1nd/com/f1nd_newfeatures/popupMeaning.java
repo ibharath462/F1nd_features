@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -133,21 +134,21 @@ public class popupMeaning extends Activity {
 
                 if(!sword.equals(word)){
                     sword = word.getText().toString();
-                    //setContent();
                 }
 
             }
         });
 
 
-        setContent();
+
+        setContent(false);
 
 
 
     }
 
 
-    public void setContent(){
+    public void setContent(boolean isAddHistory){
 
 
         JSONArray resM = dbHandler.getMeaning(sword);
@@ -176,7 +177,9 @@ public class popupMeaning extends Activity {
         }
 
         Log.d("F1nd_Popup_Meaning" , "" + meaningAL.size());
-        dbHandler.addHistory(historyId);
+        if(isAddHistory){
+            dbHandler.addHistory(historyId);
+        }
         adapter = new meaningAdapter(getApplicationContext(), 0, meaningAL);
         meaning_listView.setAdapter(adapter);
 
@@ -233,7 +236,7 @@ public class popupMeaning extends Activity {
                             word.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    setContent();
+                                    setContent(true);
                                 }
                             });
 
@@ -247,19 +250,26 @@ public class popupMeaning extends Activity {
                         @Override
                         public void run() {
 
-                            if(suggestionsAdapter != null && !suggestionsAdapter.isEmpty()){
-                                suggestionsAdapter.clear();
-                            }
+                            try {
+                                if (suggestionsAdapter != null && !suggestionsAdapter.isEmpty()) {
+                                    suggestionsAdapter.clear();
+                                }
 
-                            for(String t : suggestions){
-                                Log.d("F1nd_Popup_Meaning" , "new search " + t);
-                                suggestionsAdapter.add(t);
+                                for (String t : suggestions) {
+                                    Log.d("F1nd_Popup_Meaning", "new search " + t);
+                                    suggestionsAdapter.add(t);
+                                }
+                                word.setAdapter(suggestionsAdapter);
+                                suggestionsAdapter.notifyDataSetChanged();
                             }
-                            word.setAdapter(suggestionsAdapter);
-                            suggestionsAdapter.notifyDataSetChanged();
+                            catch (Exception e){
+                                Log.d("F1nd_Popup_Meaning", "Exception.....");
+                            }
 
                         }
                     });
+
+
                 }
 
 

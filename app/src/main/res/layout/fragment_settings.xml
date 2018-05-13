@@ -147,6 +147,7 @@
         android:id="@+id/startService"
         android:layout_width="match_parent"
         android:textSize="32sp"
+        android:background="@drawable/rounded_buttonstart"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"
         android:text="Start F1nding" />
