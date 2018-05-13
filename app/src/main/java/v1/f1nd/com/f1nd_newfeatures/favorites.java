@@ -159,7 +159,7 @@ public class favorites extends Fragment {
             new ShowCaseView.Builder(getContext())
                     .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_favorites)))
                     .withTypedRadius(new Radius(186F))
-                    .withContent("Click on heart icon anywhere to make list of your favorites.\nClick again on heart to remove from favorites.")
+                    .withContent("Click on heart icon anywhere to add it as your favorite.\nClicking again will remove it from the list")
                     .build()
                     .show(this);
             prefs.edit().putBoolean("favFirstRun", false).commit();

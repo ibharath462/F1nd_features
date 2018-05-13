@@ -32,16 +32,13 @@ public class onBoarding extends FancyWalkthroughActivity {
 
         if(prefs.getBoolean("firstrun", true) || isFromMA){
 
-            FancyWalkthroughCard fancywalkthroughCard1 = new FancyWalkthroughCard("Introducing F1nd", "Completely offline popup dictionary",R.drawable.popupedit);
-            FancyWalkthroughCard fancywalkthroughCard2 = new FancyWalkthroughCard("With sentence parser", "Introducing first of its kind parser where a word can be extracted from tweets / feeds on copying",R.drawable.parser);
-            FancyWalkthroughCard fancywalkthroughCard3 = new FancyWalkthroughCard("Select to F1nd", "If you are using android 6.0+ , then select a word and click on F1nd",R.drawable.process);
-            FancyWalkthroughCard fancywalkthroughCard4 = new FancyWalkthroughCard("Copy to F1nd", "Enable copy 2 F1nd and start service, F1nd will run in bg & u can copy word/sentence for meaning",R.drawable.settingsh);
-            FancyWalkthroughCard fancywalkthroughCard5 = new FancyWalkthroughCard("Learn a Word", "Enable LaW and start service, F1nd will give u a new word as per defined interval. Dont worry if u have missed, u can catch it in LaW",R.drawable.lll);
-            FancyWalkthroughCard fancywalkthroughCard6 = new FancyWalkthroughCard("Normal dictionary", "F1nd also acts as normal dictionary, wehre u can search meanings like a normal dictionary",R.drawable.home);
-            FancyWalkthroughCard fancywalkthroughCard7 = new FancyWalkthroughCard("History", "The words u F1nd will be added to the history, dont worry, u can double tap the word to remove it",R.drawable.home);
-            FancyWalkthroughCard fancywalkthroughCard8 = new FancyWalkthroughCard("Favorites", "You can have your favorite words under a hood, just press on the love icon of the word / meaning",R.drawable.favorites);
-            FancyWalkthroughCard fancywalkthroughCard9 = new FancyWalkthroughCard("Long press", "Long press on a word for quick meaning",R.drawable.longpress);
-            FancyWalkthroughCard fancywalkthroughCard10 = new FancyWalkthroughCard("Share", "Challenge friends by sharing the meaning with friends and asking them to F1nd the word !",R.drawable.shareh);
+            FancyWalkthroughCard fancywalkthroughCard1 = new FancyWalkthroughCard("Introducing F1nd", "Completely offline popup dictionary, also acts as normal dictionary",R.drawable.popupedit);
+            FancyWalkthroughCard fancywalkthroughCard2 = new FancyWalkthroughCard("With sentence parser", "Introducing first of its kind parser where a word can be extracted from tweets / feeds on copying. Cycle through the words with the controls",R.drawable.parser);
+            FancyWalkthroughCard fancywalkthroughCard3 = new FancyWalkthroughCard("Select to F1nd", "If you are using Android Marshmallow or later versions , then select a word on any app then click on three dots and choose F1nd",R.drawable.process);
+            FancyWalkthroughCard fancywalkthroughCard4 = new FancyWalkthroughCard("Copy to F1nd", "Enable copy to F1nd and start service, F1nd will run in bg & u can copy word/sentence for meaning",R.drawable.copy);
+            FancyWalkthroughCard fancywalkthroughCard5 = new FancyWalkthroughCard("Learn a Word", "Enable LaW and start service, F1nd will give u new words as per defined interval. Dont worry if u have missed, u can catch it in LaW tab",R.drawable.law);
+            FancyWalkthroughCard fancywalkthroughCard9 = new FancyWalkthroughCard("Long press", "Long press on a word for quick meaning",R.drawable.quickview);
+            FancyWalkthroughCard fancywalkthroughCard10 = new FancyWalkthroughCard("Share", "Challenge friends by sharing the meaning with friends and asking them to F1nd the word !",R.drawable.sharesss);
 
 
 
@@ -56,12 +53,7 @@ public class onBoarding extends FancyWalkthroughActivity {
             fancywalkthroughCard5.setBackgroundColor(R.color.white);
             fancywalkthroughCard5.setIconLayoutParams(2048,height,0,0,0,0);
 
-            fancywalkthroughCard6.setBackgroundColor(R.color.white);
-            fancywalkthroughCard6.setIconLayoutParams(2048,height,0,0,0,0);
-            fancywalkthroughCard7.setBackgroundColor(R.color.white);
-            fancywalkthroughCard7.setIconLayoutParams(2048,height,0,0,0,0);
-            fancywalkthroughCard8.setBackgroundColor(R.color.white);
-            fancywalkthroughCard8.setIconLayoutParams(2048,height,0,0,0,0);
+
             fancywalkthroughCard9.setBackgroundColor(R.color.white);
             fancywalkthroughCard9.setIconLayoutParams(2048,height,0,0,0,0);
             fancywalkthroughCard10.setBackgroundColor(R.color.white);
@@ -73,9 +65,6 @@ public class onBoarding extends FancyWalkthroughActivity {
             pages.add(fancywalkthroughCard3);
             pages.add(fancywalkthroughCard4);
             pages.add(fancywalkthroughCard5);
-            pages.add(fancywalkthroughCard6);
-            pages.add(fancywalkthroughCard7);
-            pages.add(fancywalkthroughCard8);
             pages.add(fancywalkthroughCard9);
             pages.add(fancywalkthroughCard10);
 

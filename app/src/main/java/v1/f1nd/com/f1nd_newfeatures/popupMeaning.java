@@ -37,6 +37,10 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
+
 import static android.graphics.Color.*;
 
 public class popupMeaning extends Activity {
@@ -78,6 +82,18 @@ public class popupMeaning extends Activity {
 
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("popupFirstRun", true)){
+
+            new ShowCaseView.Builder(getApplicationContext())
+                    .withTypedPosition(new ViewPosition(findViewById(R.id.llll)))
+                    .withTypedRadius(new Radius(186F))
+                    .withContent("Touch anywhere outside the green window to close")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("popupFirstRun", false).commit();
+
+        }
 
         //Getting the process text...
         if(getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT) != null){

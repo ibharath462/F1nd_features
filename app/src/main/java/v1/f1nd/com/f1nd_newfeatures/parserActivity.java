@@ -41,6 +41,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.ViewPosition;
+import ru.dimorinny.showcasecard.radius.Radius;
+
 public class parserActivity extends Activity {
 
     ArrayList<PieEntry> entries = new ArrayList<>();
@@ -125,6 +129,18 @@ public class parserActivity extends Activity {
         res = getApplicationContext().getResources();
         prefs = getApplicationContext().getSharedPreferences("f1nd.initial.bharath.newUI", Context.MODE_PRIVATE);
 
+        if(prefs.getBoolean("parserFirstRun", true)){
+
+            new ShowCaseView.Builder(getApplicationContext())
+                    .withTypedPosition(new ViewPosition(findViewById(R.id.back)))
+                    .withTypedRadius(new Radius(186F))
+                    .withContent("Click outside this box to close the window")
+                    .build()
+                    .show(this);
+            prefs.edit().putBoolean("parserFirstRun", false).commit();
+
+        }
+
         copiedSentence = prefs.getString("meaningSearchWord","ROFL");
 
         sentenceLength = copiedSentence.split(" ").length;
@@ -135,6 +151,17 @@ public class parserActivity extends Activity {
             Log.d("F1nd_parserActivity", "VISIBLEEEE " + sentenceLength);
             next.setVisibility(View.VISIBLE);
             prev.setVisibility(View.VISIBLE);
+            if(prefs.getBoolean("prevFirstRun", true)){
+
+                new ShowCaseView.Builder(getApplicationContext())
+                        .withTypedPosition(new ViewPosition(findViewById(R.id.back)))
+                        .withTypedRadius(new Radius(186F))
+                        .withContent("Click <- to cycle backwards the sentence")
+                        .build()
+                        .show(this);
+                prefs.edit().putBoolean("prevFirstRun", false).commit();
+
+            }
         }else{
             next.setVisibility(View.INVISIBLE);
             prev.setVisibility(View.INVISIBLE);
@@ -272,7 +299,7 @@ public class parserActivity extends Activity {
                 closePie.setVisibility(View.VISIBLE);
                 parserLL.setDrawingCacheEnabled(false);
 
-                String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/"  + "barbieee1.jpeg";
+                String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/"  + "F1nd.jpeg";
                 File imageFile = new File(mPath);
 
                 FileOutputStream outputStream = null;

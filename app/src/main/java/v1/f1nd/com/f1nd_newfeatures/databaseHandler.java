@@ -61,25 +61,31 @@ public class databaseHandler extends SQLiteOpenHelper {
         DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
-        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning from dict left join favorites_mapping on favorites_mapping.id = dict.id where favorites_mapping.id = dict.id ;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                JSONObject tWord = new JSONObject();
-                try {
-                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                resultArray.put(tWord);
-            } while (cursor.moveToNext());
+        try{
+
+            database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning from dict left join favorites_mapping on favorites_mapping.id = dict.id where favorites_mapping.id = dict.id ;";
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject tWord = new JSONObject();
+                    try {
+                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    resultArray.put(tWord);
+                } while (cursor.moveToNext());
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "result array of getFavorites " + resultArray.toString());
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
-        Log.d("F1nd_DB: ", "result array of getFavorites " + resultArray.toString());
         return resultArray;
     }
 
@@ -92,29 +98,35 @@ public class databaseHandler extends SQLiteOpenHelper {
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER(" + WORD + ") LIKE '" + q.toUpperCase() + "%' limit 20;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                JSONObject tWord = new JSONObject();
-                try {
-                    if(!addedWords.contains(cursor.getString(cursor.getColumnIndex(WORD)))){
-                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                        if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
-                            tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+        try{
+
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject tWord = new JSONObject();
+                    try {
+                        if(!addedWords.contains(cursor.getString(cursor.getColumnIndex(WORD)))){
+                            tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                            tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                            tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                            tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                            if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                                tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                            }
+                            addedWords.add(cursor.getString(cursor.getColumnIndex(WORD)));
                         }
-                        addedWords.add(cursor.getString(cursor.getColumnIndex(WORD)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                resultArray.put(tWord);
-            } while (cursor.moveToNext());
+                    resultArray.put(tWord);
+                } while (cursor.moveToNext());
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "result array of search word " + resultArray.toString());
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
-        Log.d("F1nd_DB: ", "result array of search word " + resultArray.toString());
         return resultArray;
     }
 
@@ -145,13 +157,19 @@ public class databaseHandler extends SQLiteOpenHelper {
 
         //Check if there is already an entry..
         String selectQuery = "select * from history_mapping where id=" + id;
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (!cursor.moveToFirst()) {
-            ContentValues cv = new ContentValues();
-            cv.put("id", id);
-            cv.put("time", System.currentTimeMillis());
-            database.insert("history_mapping", null, cv);
-            Log.d("F1nd_DB:", "History added succesfull " + id);
+        try{
+
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (!cursor.moveToFirst()) {
+                ContentValues cv = new ContentValues();
+                cv.put("id", id);
+                cv.put("time", System.currentTimeMillis());
+                database.insert("history_mapping", null, cv);
+                Log.d("F1nd_DB:", "History added succesfull " + id);
+            }
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
         database.close();
     }
@@ -162,26 +180,30 @@ public class databaseHandler extends SQLiteOpenHelper {
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         JSONArray resultArray = new JSONArray();
         String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join history_mapping on history_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where history_mapping.id = dict.id order by history_mapping.time desc;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                JSONObject tWord = new JSONObject();
-                try {
-                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
-                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+        try{
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject tWord = new JSONObject();
+                    try {
+                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                        if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                            tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                resultArray.put(tWord);
-            } while (cursor.moveToNext());
+                    resultArray.put(tWord);
+                } while (cursor.moveToNext());
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "result array of history" + resultArray.toString());
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
-        Log.d("F1nd_DB: ", "result array of history" + resultArray.toString());
         return resultArray;
     }
 
@@ -208,27 +230,33 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         String selectQuery = "SELECT * FROM dict ORDER BY RANDOM() LIMIT 1;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                try {
-                    wod.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    wod.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    wod.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    wodId = cursor.getString(cursor.getColumnIndex(ID));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } while (cursor.moveToNext());
-        }
+        try{
 
-        //Adding details in the WOD table...
-        ContentValues cv = new ContentValues();
-        cv.put("id", wodId);
-        cv.put("time", System.currentTimeMillis());
-        database.insert("wod_mapping", null, cv);
-        Log.d("F1nd_DB:", "WOD added succesfull " + wodId);
-        database.close();
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    try {
+                        wod.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        wod.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        wod.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        wodId = cursor.getString(cursor.getColumnIndex(ID));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            //Adding details in the WOD table...
+            ContentValues cv = new ContentValues();
+            cv.put("id", wodId);
+            cv.put("time", System.currentTimeMillis());
+            database.insert("wod_mapping", null, cv);
+            Log.d("F1nd_DB:", "WOD added succesfull " + wodId);
+            database.close();
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
+        }
 
         return wod;
     }
@@ -241,25 +269,29 @@ public class databaseHandler extends SQLiteOpenHelper {
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "select dict.id,dict.word,dict.wordtype,dict.meaning,favorites_mapping.fId from dict left join wod_mapping on wod_mapping.id = dict.id left join favorites_mapping on favorites_mapping.id = dict.id where wod_mapping.id = dict.id order by wod_mapping.time desc;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                JSONObject tWord = new JSONObject();
-                try {
-                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
-                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+        try{
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject tWord = new JSONObject();
+                    try {
+                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                        if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                            tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                resultArray.put(tWord);
-            } while (cursor.moveToNext());
+                    resultArray.put(tWord);
+                } while (cursor.moveToNext());
+            }
+            database.close();
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
         Log.d("F1nd_DB: ", "result array of getWordsOfDays " + resultArray.toString());
         return resultArray;
     }
@@ -272,26 +304,30 @@ public class databaseHandler extends SQLiteOpenHelper {
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "SELECT  dict.id,dict.word,dict.meaning,dict.wordtype,favorites_mapping.fId from dict left join favorites_mapping on favorites_mapping.id = dict.id WHERE UPPER(" + WORD + ") = '" + meaningSearchWord.toUpperCase() + "' limit 10;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                JSONObject tWord = new JSONObject();
-                try {
-                    tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
-                    tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
-                    tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
-                    tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
-                    if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
-                        tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+        try {
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    JSONObject tWord = new JSONObject();
+                    try {
+                        tWord.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        tWord.put("id", cursor.getString(cursor.getColumnIndex(ID)));
+                        tWord.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        tWord.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        if (cursor.getString(cursor.getColumnIndex(FID)) != null) {
+                            tWord.put("fid", cursor.getString(cursor.getColumnIndex(FID)));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                resultArray.put(tWord);
-            } while (cursor.moveToNext());
+                    resultArray.put(tWord);
+                } while (cursor.moveToNext());
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "result array of get menaning of  word " + resultArray.toString());
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
-        Log.d("F1nd_DB: ", "result array of get menaning of  word " + resultArray.toString());
         return resultArray;
 
     }
@@ -304,12 +340,16 @@ public class databaseHandler extends SQLiteOpenHelper {
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "SELECT  dict.id,dict.word from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "%' limit 1;";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)));
+        try{
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)));
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "result array of search word " + id);
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-        database.close();
-        Log.d("F1nd_DB: ", "result array of search word " + id);
         return id;
     }
 
@@ -321,16 +361,20 @@ public class databaseHandler extends SQLiteOpenHelper {
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         String selectQuery = "SELECT dict.usage from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "';";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                if(!cursor.getString(cursor.getColumnIndex("usage")).equals("")){
-                    example += cursor.getString(cursor.getColumnIndex("usage")) + "\n\n";
-                }
-            }while (cursor.moveToNext());
+        try{
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    if(!cursor.getString(cursor.getColumnIndex("usage")).equals("")){
+                        example += cursor.getString(cursor.getColumnIndex("usage")) + "\n\n";
+                    }
+                }while (cursor.moveToNext());
+            }
+            database.close();
+            Log.d("F1nd_DB: ", "Example....  " + example);
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
         }
-                database.close();
-        Log.d("F1nd_DB: ", "Example....  " + example);
         return example;
     }
 }

@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity{
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 prefs.edit().putBoolean("firstrun", false).commit();
+                setActionBar("F1nd");
             }else{
                 setActionBar("F1nd");
                 ft = getSupportFragmentManager().beginTransaction();
@@ -199,6 +200,19 @@ public class MainActivity extends AppCompatActivity{
 
             builder.setTitle("Developer")
                     .setMessage("Bharath Asokan\nibharath462@gmail.com\ngithub.com/RobertSpartacus")
+                    .show();
+            return true;
+        }else if(id == R.id.tips){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Light_Dialog);
+            } else {
+                builder = new AlertDialog.Builder(MainActivity.this);
+            }
+
+
+            builder.setTitle("Battery optimistion")
+                    .setMessage("If you are using Nougat or higher then opt out battery optimisation for F1nd inorder for uninterrupted F1NDing & learning.\n\nIf you have Xiaomi or Micromax device then goto installed apps and choose F1ND running in the backgorund")
                     .show();
             return true;
         }

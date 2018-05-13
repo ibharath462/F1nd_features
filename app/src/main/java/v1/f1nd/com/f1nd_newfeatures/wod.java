@@ -145,7 +145,7 @@ public class wod extends Fragment {
             new ShowCaseView.Builder(getContext())
                     .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_wod)))
                     .withTypedRadius(new Radius(186F))
-                    .withContent("Incase if you miss out any word from Learn a Word, we have it here to make sure you learn :-)")
+                    .withContent("Incase if you miss out any word from Learn a Word, we have it here to make sure you learn. Double tap on any word to remove it from LaW")
                     .build()
                     .show(this);
             prefs.edit().putBoolean("wodFirstRun", false).commit();

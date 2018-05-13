@@ -142,7 +142,7 @@ public class meaning extends Fragment {
             new ShowCaseView.Builder(getContext())
                     .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.meaning_listView)))
                     .withTypedRadius(new Radius(300F))
-                    .withContent("Long press on a meaning to get examples using the word, subject to availability :p")
+                    .withContent("Long press on a meaning to get examples using the word, subject to availability")
                     .build()
                     .show(this);
             prefs.edit().putBoolean("meaningFirstRun", false).commit();

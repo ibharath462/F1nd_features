@@ -268,7 +268,7 @@ public class settings extends Fragment {
                     stopWOD.cancelAlarm(getContext());
                     NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     mNotificationManager.cancelAll();
-                    startService.setText("Start F1nd");
+                    startService.setText("Start F1nding");
                     isServiceRuning = false;
                     startService.setBackground(getResources().getDrawable(R.drawable.rounded_buttonstart));
                     Log.d("F1nd_Settings ","Service stopped");

@@ -6,6 +6,11 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="About" />
 
+    <item
+        android:id="@+id/tips"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Tips" />
+
 
 
 </menu>

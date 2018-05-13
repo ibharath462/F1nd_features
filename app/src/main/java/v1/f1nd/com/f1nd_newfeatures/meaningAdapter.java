@@ -107,7 +107,7 @@ public class meaningAdapter extends ArrayAdapter{
                 tips.setVisibility(View.INVISIBLE);
                 cardView.setDrawingCacheEnabled(false);
 
-                String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/"  + "barbieee1.jpeg";
+                String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/"  + "F1nd.jpeg";
                 File imageFile = new File(mPath);
 
                 FileOutputStream outputStream = null;

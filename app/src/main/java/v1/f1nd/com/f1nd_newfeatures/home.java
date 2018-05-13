@@ -156,7 +156,7 @@ public class home extends Fragment {
             new ShowCaseView.Builder(getContext())
                     .withTypedPosition(new ViewPosition(getActivity().findViewById(R.id.navigation_home)))
                     .withTypedRadius(new Radius(300F))
-                    .withContent("Long press on any word to get quick meaning of the word")
+                    .withContent("Your F1nd history and search results are displayed here, double tap on any word to remove it from history.")
                     .build()
                     .show(this);
             prefs.edit().putBoolean("homeFirstRun", false).commit();
