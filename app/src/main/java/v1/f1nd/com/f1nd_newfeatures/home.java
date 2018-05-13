@@ -243,10 +243,16 @@ public class home extends Fragment {
                 e.printStackTrace();
             }
         }
-        adapter = new wordAdapter(getContext(), 0, words);
-        adapter.notifyDataSetChanged();
+        if(adapter == null){
+            adapter = new wordAdapter(getContext(), 0, words);
+        }else{
+            adapter.clear();
+            for(Word t : words){
+                adapter.add(t);
+            }
+            adapter.notifyDataSetChanged();
+        }
         search_listView.setAdapter(adapter);
-
 
     }
 }

@@ -1,8 +1,6 @@
 package v1.f1nd.com.f1nd_newfeatures;
 
 import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -181,11 +178,11 @@ public class settings extends Fragment {
         timeInterval.setText("" + wodInterval);
 
         if(isServiceRuning){
-            startService.setBackgroundColor(Color.RED);
-            startService.setText("Stop Service");
+            startService.setBackground(getResources().getDrawable(R.drawable.rounded_buttonstop));
+            startService.setText("Stop F1nd");
         }else{
-            startService.setBackgroundColor(Color.GREEN);
-            startService.setText("Start Service");
+            startService.setBackground(getResources().getDrawable(R.drawable.rounded_buttonstart));
+            startService.setText("Start F1nd");
         }
 
 //        saveSettings.setOnClickListener(new View.OnClickListener() {
@@ -249,8 +246,8 @@ public class settings extends Fragment {
                         }
                     }
                     if(!noneFlag){
-                        startService.setText("Stop Service");
-                        startService.setBackgroundColor(Color.RED);
+                        startService.setText("Stop F1nd");
+                        startService.setBackground(getResources().getDrawable(R.drawable.rounded_buttonstop));
                         isServiceRuning = true;
                         Log.d("F1nd_Settings ","Started service");
                     }else{
@@ -271,9 +268,9 @@ public class settings extends Fragment {
                     stopWOD.cancelAlarm(getContext());
                     NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     mNotificationManager.cancelAll();
-                    startService.setText("Start Service");
+                    startService.setText("Start F1nd");
                     isServiceRuning = false;
-                    startService.setBackgroundColor(Color.GREEN);
+                    startService.setBackground(getResources().getDrawable(R.drawable.rounded_buttonstart));
                     Log.d("F1nd_Settings ","Service stopped");
                 }
 

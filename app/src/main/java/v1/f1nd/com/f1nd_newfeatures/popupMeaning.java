@@ -46,6 +46,7 @@ public class popupMeaning extends Activity {
     ListView meaning_listView;
     String sword;
     ArrayAdapter<meaningBean> adapter=null;
+    ArrayAdapter<String> suggestionsAdapter=null;
     databaseHandler dbHandler;
     ArrayList<meaningBean> meaningAL;
     JSONArray searchArray;
@@ -99,6 +100,7 @@ public class popupMeaning extends Activity {
         final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         word.setEnabled(true);
+        word.setThreshold(1);
         word.setTextIsSelectable(true);
         word.setText(sword);
 
@@ -130,9 +132,8 @@ public class popupMeaning extends Activity {
             public void afterTextChanged(Editable editable) {
 
                 if(!sword.equals(word)){
-                    //imm.hideSoftInputFromWindow(word.getWindowToken(), 0);
                     sword = word.getText().toString();
-                    setContent();
+                    //setContent();
                 }
 
             }
@@ -151,10 +152,10 @@ public class popupMeaning extends Activity {
 
         JSONArray resM = dbHandler.getMeaning(sword);
         meaningAL = new ArrayList<>();
+        Long historyId = 1L;
 
         if(resM.length() == 0){
             Toast.makeText(getApplicationContext(),  "No matches found for the word, please try changing the tense / word",Toast.LENGTH_SHORT).show();
-            //finish();
         }
 
         try {
@@ -167,7 +168,7 @@ public class popupMeaning extends Activity {
                 if(tWord.has("fid")){
                     isLiked = true;
                 }
-
+                historyId = tWord.getLong("id");
                 meaningAL.add(new meaningBean(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),meaningString,isLiked));
             }
         } catch (JSONException e) {
@@ -175,7 +176,7 @@ public class popupMeaning extends Activity {
         }
 
         Log.d("F1nd_Popup_Meaning" , "" + meaningAL.size());
-
+        dbHandler.addHistory(historyId);
         adapter = new meaningAdapter(getApplicationContext(), 0, meaningAL);
         meaning_listView.setAdapter(adapter);
 
@@ -196,14 +197,13 @@ public class popupMeaning extends Activity {
 
     public  class runOnBG extends AsyncTask<String,String,String>{
 
-        ArrayAdapter<String> adapter;
 
         @Override
         protected String doInBackground(String... params) {
 
             searchArray = dbHandler.searchWord(params[0]);
 
-            String[] suggestions;
+            final String[] suggestions;
 
             List<String> tList = new ArrayList<>();
 
@@ -222,8 +222,45 @@ public class popupMeaning extends Activity {
 
                 suggestions = tList.toArray(new String[0]);
 
-                adapter = new ArrayAdapter<String>(popupMeaning.this, android.R.layout.simple_dropdown_item_1line, suggestions);
+                if(suggestionsAdapter == null){
+                    suggestionsAdapter = new ArrayAdapter<String>(popupMeaning.this, android.R.layout.simple_dropdown_item_1line, suggestions);
+                    runOnUiThread(new Runnable() {
 
+                        @Override
+                        public void run() {
+
+                            word.setAdapter(suggestionsAdapter);
+                            word.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    setContent();
+                                }
+                            });
+
+                        }
+                    });
+
+                }else{
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            if(suggestionsAdapter != null && !suggestionsAdapter.isEmpty()){
+                                suggestionsAdapter.clear();
+                            }
+
+                            for(String t : suggestions){
+                                Log.d("F1nd_Popup_Meaning" , "new search " + t);
+                                suggestionsAdapter.add(t);
+                            }
+                            word.setAdapter(suggestionsAdapter);
+                            suggestionsAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+                }
 
 
             }
@@ -232,12 +269,5 @@ public class popupMeaning extends Activity {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(String s) {
-
-            word.setAdapter(adapter);
-
-            super.onPostExecute(s);
-        }
     }
 }

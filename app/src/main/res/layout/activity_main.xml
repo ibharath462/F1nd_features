@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#efebe9"
+    android:background="#ffffff"
     android:layout_height="match_parent">
 
 
@@ -26,10 +26,10 @@
             android:layout_alignParentBottom="true"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:elevation="8dp"
+            android:elevation="8dp"
             app:itemIconTint="@drawable/bnv_selector"
             app:itemTextColor="@drawable/bnv_selector"
-            android:background="#795548"
+            android:background="#00695C"
             app:menu="@menu/navigation" />
 
 

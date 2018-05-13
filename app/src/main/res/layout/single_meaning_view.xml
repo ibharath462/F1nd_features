@@ -11,17 +11,14 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/shareCardView"
         app:cardUseCompatPadding="true"
-        android:elevation="5dp"
-        card_view:cardElevation="5dp"
+        android:elevation="3dp"
+        card_view:cardElevation="3dp"
         card_view:cardUseCompatPadding="true"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="7dp">
 
-        <!-- Bottom View End-->
-
-        <!-- Surface View Start -->
         <LinearLayout
             android:padding="10dp"
             android:background="#ffffff"

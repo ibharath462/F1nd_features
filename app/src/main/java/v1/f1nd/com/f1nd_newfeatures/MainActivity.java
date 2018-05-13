@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -32,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity{
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new home();
                     ft.replace(R.id.content, currentFragment,"home").addToBackStack("home");
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
                     exitCount = 0;
                     return true;
@@ -86,7 +88,6 @@ public class MainActivity extends AppCompatActivity{
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new favorites();
                     ft.replace(R.id.content, currentFragment,"favorites").addToBackStack("favorites");
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
                     exitCount = 0;
                     return true;
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity{
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new wod();
                     ft.replace(R.id.content, currentFragment,"wod").addToBackStack("wod");
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
                     exitCount = 0;
                     return true;
@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity{
                     ft = getSupportFragmentManager().beginTransaction();
                     currentFragment = new settings();
                     ft.replace(R.id.content, currentFragment,"settings").addToBackStack("settings");
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     ft.commit();
                     exitCount = 0;
                     return true;
@@ -215,9 +214,8 @@ public class MainActivity extends AppCompatActivity{
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(true);
-
         actionBar.setTitle(heading);
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4e342e")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00695C")));
         actionBar.show();
 
     }
@@ -246,20 +244,10 @@ public class MainActivity extends AppCompatActivity{
 
     static void copyDataBase() throws IOException{
 
-        //Open your local db as the input stream
-        InputStream myInput;
-        myInput = res.openRawResource(R.raw.dict);
-        String outFileName = dbPath + dbName;
-        Log.d("F1nd_MainActivity", "" + outFileName);
-        OutputStream myOutput = new FileOutputStream(outFileName);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer))>0){
-            myOutput.write(buffer, 0, length);
-        }
-        myOutput.flush();
-        myOutput.close();
-        myInput.close();
+        runOnBG bgThread = new runOnBG();
+
+        bgThread.execute();
+
     }
 
 
@@ -284,6 +272,7 @@ public class MainActivity extends AppCompatActivity{
 
         }
 
+
     }
 
     @Override
@@ -296,6 +285,39 @@ public class MainActivity extends AppCompatActivity{
             finish();
         }
 
+    }
+
+    public static class runOnBG extends AsyncTask<String,String,String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            InputStream myInput;
+            myInput = res.openRawResource(R.raw.dict);
+            String outFileName = dbPath + dbName;
+            Log.d("F1nd_MainActivity", "" + outFileName);
+            OutputStream myOutput = null;
+            try {
+                myOutput = new FileOutputStream(outFileName);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = myInput.read(buffer))>0){
+                    myOutput.write(buffer, 0, length);
+                }
+                myOutput.flush();
+                myOutput.close();
+                myInput.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+
+            super.onPostExecute(s);
+        }
     }
 
 }
