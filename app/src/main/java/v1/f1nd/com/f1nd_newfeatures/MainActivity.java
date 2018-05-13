@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity{
 
 
             builder.setTitle("Battery optimistion")
-                    .setMessage("If you are using Nougat or higher then opt out battery optimisation for F1nd inorder for uninterrupted F1NDing & learning.\n\nIf you have Xiaomi or Micromax device then goto installed apps and choose F1ND running in the backgorund")
+                    .setMessage("If you are using Nougat or higher then opt out battery optimisation for F1nd inorder for uninterrupted F1NDing & learning.\n\nIf you have Xiaomi or Micromax device then goto installed apps and choose F1ND running in the backgorund\n\nLock F1nd in recents for uniterrupted service.\nIf sharing doesnt work, enable stroage permission from settings again")
                     .show();
             return true;
         }
