@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -227,32 +228,50 @@ public class home extends Fragment {
     }
 
     public void searchAndAssign(String searchTerm){
-        searchArray = dbHandler.searchWord(searchTerm);
-        words = new ArrayList<>();
 
-        for(int i=0; i<searchArray.length();i++){
-            try {
-                JSONObject tWord = searchArray.getJSONObject(i);
-                boolean isLiked = false;
-                if(tWord.has("fid")){
-                    isLiked = true;
+        runOnBG bgThread = new runOnBG();
+
+        bgThread.execute(searchTerm);
+
+
+    }
+
+    public  class runOnBG extends AsyncTask<String,String,String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            searchArray = dbHandler.searchWord(params[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            words = new ArrayList<>();
+            for(int i=0; i<searchArray.length();i++){
+                try {
+                    JSONObject tWord = searchArray.getJSONObject(i);
+                    boolean isLiked = false;
+                    if(tWord.has("fid")){
+                        isLiked = true;
+                    }
+                    Log.d("F1nd_MainActivity","parsed " + tWord.toString() + " " + isLiked + "\n");
+                    words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,false,1));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                Log.d("F1nd_MainActivity","parsed " + tWord.toString() + " " + isLiked + "\n");
-                words.add(new Word(tWord.getLong("id"),tWord.getString("word"),tWord.getString("wordtype"),tWord.getString("meaning"),isLiked,false,1));
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
-        if(adapter == null){
-            adapter = new wordAdapter(getContext(), 0, words);
-        }else{
-            adapter.clear();
-            for(Word t : words){
-                adapter.add(t);
+            if(adapter == null){
+                adapter = new wordAdapter(getContext(), 0, words);
+            }else{
+                adapter.clear();
+                for(Word t : words){
+                    adapter.add(t);
+                }
+                adapter.notifyDataSetChanged();
             }
-            adapter.notifyDataSetChanged();
+            search_listView.setAdapter(adapter);
+            super.onPostExecute(s);
         }
-        search_listView.setAdapter(adapter);
-
     }
 }
