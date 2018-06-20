@@ -25,7 +25,7 @@ public class onBoarding extends FancyWalkthroughActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
 
-        height = (height > 2000) ? 1024 : 768;
+        height = (height > 2000) ? 1024 : 512;
 
         Intent ti =getIntent();
         boolean isFromMA = ti.getBooleanExtra("isFromMA",false);

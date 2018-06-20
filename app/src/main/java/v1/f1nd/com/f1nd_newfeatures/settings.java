@@ -53,7 +53,7 @@ public class settings extends Fragment {
     static Resources res;
     SharedPreferences prefs = null;
 
-    Switch eCopy,eLaW;
+    Switch eCopy,eLaW,greMode;
 
     private OnFragmentInteractionListener mListener;
 
@@ -163,12 +163,15 @@ public class settings extends Fragment {
 
         eLaW = (Switch)getView().findViewById(R.id.eLaW);
 
+        greMode = (Switch)getView().findViewById(R.id.greMode);
+
 
         isServiceRuning = isMyServiceRunning(bgService.class) || isMyServiceRunning(clipboardService.class);
 
 
         eCopy.setChecked(prefs.getBoolean("isCopyListener",false));
         eLaW.setChecked(prefs.getBoolean("isLaWEnabled",false));
+        greMode.setChecked(prefs.getBoolean("isGREEnabled",false));
 
         Long wodInterval = Long.parseLong(prefs.getString("wodInterval", "5"));
 
@@ -205,6 +208,13 @@ public class settings extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean("isLaWEnabled", b).commit();
+            }
+        });
+
+        greMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean("isGREEnabled", b).commit();
             }
         });
 

@@ -41,21 +41,31 @@ public class wodReceiver extends BroadcastReceiver {
 
         boolean isLaW = prefs.getBoolean("isLaWEnabled",false);
 
+        boolean isGRE = prefs.getBoolean("isGREEnabled",false);
+
         if(isLaW){
 
             //Getting a random word...
             databaseHandler dbHandler = new databaseHandler(context);
-            JSONObject wod = dbHandler.getWordOfTheDay();
+            JSONObject wod = null;
+            if(isGRE){
+                wod = dbHandler.getGREwordOfTheDay();
+            }else {
+                wod = dbHandler.getWordOfTheDay();
+            }
             try {
                 word = wod.getString("word");
                 meaning = wod.getString("meaning");
                 wordType = wod.getString("wordtype");
-            } catch (JSONException e) {
+
+                meaning = meaning.replaceAll("^ +| +$|( )+", " ");
+                meaning = meaning.replace("\n", "").replace("\r", "");
+                Log.d("F1nd_BCreceiver ","" +wod.toString());
+
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            meaning = meaning.replaceAll("^ +| +$|( )+", " ");
-            meaning = meaning.replace("\n", "").replace("\r", "");
-            Log.d("F1nd_BCreceiver ","" +wod.toString());
 
             //Adding to WOD shared preference...
             prefs.edit().putString("wodWord", word).commit();

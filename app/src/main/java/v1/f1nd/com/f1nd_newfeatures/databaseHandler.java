@@ -377,4 +377,65 @@ public class databaseHandler extends SQLiteOpenHelper {
         }
         return example;
     }
+
+    public JSONObject getGREwordOfTheDay(){
+
+        JSONObject res = new JSONObject();
+        String greWord = "parochial";
+        String wodId = "";
+        DB_PATH = myContext.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath();
+        String myPath = DB_PATH + DB_NAME;
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+
+        String selectQuery = "SELECT * FROM gre ORDER BY RANDOM() LIMIT 1;";
+
+        try{
+
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    greWord = cursor.getString(cursor.getColumnIndex(WORD));
+                } while (cursor.moveToNext());
+            }
+
+
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
+        }
+
+
+        selectQuery = "SELECT * FROM dict where dict.word like '" + greWord + "' LIMIT 1;";
+
+        try{
+
+            Cursor cursor = database.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    try {
+                        res.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
+                        res.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
+                        res.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
+                        wodId = cursor.getString(cursor.getColumnIndex(ID));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            //Adding details in the WOD table...
+            ContentValues cv = new ContentValues();
+            cv.put("id", wodId);
+            cv.put("time", System.currentTimeMillis());
+            database.insert("wod_mapping", null, cv);
+            Log.d("F1nd_DB:", "WOD added succesfull " + wodId);
+            database.close();
+
+        }catch (Exception e){
+            Log.e("F1nd_Exception","" + e);
+        }
+
+
+        return  res;
+    }
 }
