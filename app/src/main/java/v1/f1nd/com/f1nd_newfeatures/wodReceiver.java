@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 public class wodReceiver extends BroadcastReceiver {
 
-    String word,meaning,wordType;
+    String word="confers",meaning="have a conference in order to talk something over",wordType="verb";
     static Resources res;
     SharedPreferences prefs = null;
 
@@ -54,9 +54,9 @@ public class wodReceiver extends BroadcastReceiver {
                 wod = dbHandler.getWordOfTheDay();
             }
             try {
-                word = wod.getString("word");
-                meaning = wod.getString("meaning");
-                wordType = wod.getString("wordtype");
+                    word = wod.getString("word");
+                    meaning = wod.getString("meaning");
+                    wordType = wod.getString("wordtype");
 
                 meaning = meaning.replaceAll("^ +| +$|( )+", " ");
                 meaning = meaning.replace("\n", "").replace("\r", "");

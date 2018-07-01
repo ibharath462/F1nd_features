@@ -360,7 +360,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         Log.d("F1nd_DB: ", "path " + myPath);
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        String selectQuery = "SELECT dict.usage from dict WHERE UPPER(" + WORD + ") LIKE '" + word.toUpperCase() + "';";
+        String selectQuery = "SELECT dict.usage from dict WHERE UPPER(" + WORD + ") LIKE '%" + word.toUpperCase() + "%';";
         try{
             Cursor cursor = database.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -387,7 +387,7 @@ public class databaseHandler extends SQLiteOpenHelper {
         String myPath = DB_PATH + DB_NAME;
         database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 
-        String selectQuery = "SELECT * FROM gre ORDER BY RANDOM() LIMIT 1;";
+        String selectQuery = "SELECT * FROM gre ORDER BY RANDOM() LIMIT 1 ;";
 
         try{
 
@@ -404,21 +404,22 @@ public class databaseHandler extends SQLiteOpenHelper {
             Log.e("F1nd_Exception","" + e);
         }
 
-
-        selectQuery = "SELECT * FROM dict where dict.word like '" + greWord + "' LIMIT 1;";
-
+        greWord = greWord.trim();
+        selectQuery = "SELECT * FROM dict where UPPER(" + WORD + ") like '" + greWord.toUpperCase() + "' LIMIT 1;";
+        Log.d("F1nd_DB:", "GRE WORD1 " + greWord);
         try{
 
             Cursor cursor = database.rawQuery(selectQuery, null);
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 do {
                     try {
+                        String tWord = cursor.getString(cursor.getColumnIndex(WORD));
+                        Log.d("F1nd_DB:", "GRE WORD2 " + tWord);
                         res.put("word", cursor.getString(cursor.getColumnIndex(WORD)));
                         res.put("meaning", cursor.getString(cursor.getColumnIndex(MEANING)));
                         res.put("wordtype", cursor.getString(cursor.getColumnIndex(WORDTYPE)));
                         wodId = cursor.getString(cursor.getColumnIndex(ID));
                     } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 } while (cursor.moveToNext());
             }
@@ -434,7 +435,6 @@ public class databaseHandler extends SQLiteOpenHelper {
         }catch (Exception e){
             Log.e("F1nd_Exception","" + e);
         }
-
 
         return  res;
     }
